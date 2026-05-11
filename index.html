@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>benfirn.com</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,300&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Lato', sans-serif; overflow-x: hidden; color: #222; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: #4a5260;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 58px;
+    }
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      padding: 0 2.8rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      transition: color 0.25s;
+    }
+    nav a:hover { color: #fff; }
+    nav a.active { color: #d97068; }
+
+    /* ── SIDE DOTS ── */
+    .dots {
+      position: fixed;
+      right: 18px; top: 50%;
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 9px;
+      z-index: 999;
+    }
+    .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(100,100,100,0.4);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      border: none;
+    }
+    .dot.active { background: #d97068; transform: scale(1.4); }
+
+    /* ── HERO ── */
+    #story {
+      min-height: 100vh;
+      padding-top: 18vh;
+      background-image: url('Hero.jpg');
+      background-size: cover;
+      background-position: center 42%;
+      background-attachment: fixed;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding-left: 48%;
+    }
+    .hero-text {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .hero-text h1 {
+      font-size: clamp(3.2rem, 6.5vw, 6.5rem);
+      font-weight: 600;
+      line-height: 1.35;
+      color: #111;
+      margin-bottom: 1.5rem;
+      margin-top: 1rem;
+      margin-left: 1.5rem;
+    }
+    .hero-text .tagline {
+      font-size: 1.2rem;
+      letter-spacing: 0.35em;
+      color: #444;
+      font-weight: 300;
+      margin-top: 2rem;
+      align-self: flex-end;
+    }
+
+    /* ── SHARED: full-width photo strip (parallax) ── */
+    .photo-strip {
+      width: 100%;
+      height: 630px;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* ── SHARED: dark text block ── */
+    .dark-block {
+      background: #3d4455;
+      padding: 6rem 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .dark-block h2 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 2rem;
+      letter-spacing: 0.02em;
+    }
+    .dark-block p {
+      max-width: 720px;
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: #fff;
+      font-weight: 300;
+      margin-bottom: 1.3rem;
+    }
+    .dark-block a { color: #d97068; text-decoration: none; }
+    .dark-block a:hover { text-decoration: underline; }
+
+    /* ── SNAPSHOT ── */
+    /* dark text first, then photo below */
+    #snapshot .dark-block { padding-bottom: 5rem; }
+    section { background: #3d4455; }
+
+    /* ── PROPTECH ── */
+    #proptech {
+      background: #3d4455;
+      padding: 6rem 10%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #proptech h2 {
+      font-size: clamp(2rem, 4.5vw, 3.4rem);
+      font-weight: 700; color: #fff;
+      margin-bottom: 2rem;
+      text-align: center; letter-spacing: 0.02em;
+    }
+    #proptech .intro {
+      max-width: 740px;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    #proptech .intro p {
+      color: #fff;
+      font-weight: 300;
+      font-size: 1.02rem; line-height: 1.85;
+      margin-bottom: 1.2rem;
+    }
+    #proptech .intro a { color: #d97068; text-decoration: none; }
+    #proptech .intro a:hover { text-decoration: underline; }
+
+    .companies {
+      display: flex; gap: 3.5rem;
+      justify-content: center; flex-wrap: wrap;
+    }
+    .company { text-align: center; max-width: 210px; }
+    .logo-ring {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      margin: 0 auto 1.1rem;
+      overflow: hidden;
+    }
+    .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+    .company h3 {
+      font-size: 1rem; font-weight: 700; color: #fff;
+      margin-bottom: 0.3rem; letter-spacing: 0.02em;
+    }
+    .company .role { color: #ccc; font-size: 0.82rem; font-weight: 300; margin-bottom: 0.6rem; }
+    .company .desc { color: #fff; font-size: 0.83rem; font-weight: 300; line-height: 1.55; }
+
+    /* ── GOLF videos ── */
+    .video-grid {
+      margin-top: 2.5rem;
+      display: flex; gap: 1.5rem;
+      justify-content: center;
+      width: 100%; max-width: 1300px;
+    }
+    .video-wrap {
+      flex: 1 1 0;
+      position: relative; padding-bottom: 30%;
+      height: 0; border-radius: 6px; overflow: hidden;
+    }
+    .video-wrap iframe {
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%; border: none;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #3d4455; color: #fff;
+      text-align: center; padding: 1.4rem;
+      font-size: 0.82rem; border-top: 1px solid #4a5260;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav a { padding: 0 1.2rem; font-size: 0.85rem; }
+      #story { justify-content: center; padding-right: 5%; padding-left: 5%; }
+      .hero-text { text-align: center; }
+      .companies { gap: 2rem; }
+      .photo-strip { height: 390px; background-attachment: scroll; }
+      .dots { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#story" class="active" data-section="story">Story</a>
+    <a href="#proptech" data-section="proptech">PropTech</a>
+    <a href="#golf" data-section="golf">Golf</a>
+    <a href="#travel" data-section="travel">Travel</a>
+  </nav>
+
+  <!-- SIDE DOTS -->
+  <div class="dots">
+    <button class="dot active" aria-label="Story" onclick="goto('story')"></button>
+    <button class="dot" aria-label="PropTech" onclick="goto('proptech')"></button>
+    <button class="dot" aria-label="Golf" onclick="goto('golf')"></button>
+    <button class="dot" aria-label="Travel" onclick="goto('travel')"></button>
+  </div>
+
+  <!-- HERO -->
+  <section id="story">
+    <div class="hero-text">
+      <h1>Hi,<br>I'm Ben Firn.</h1>
+      <p class="tagline">And welcome to my spot&thinsp;.&thinsp;.&thinsp;.</p>
+    </div>
+  </section>
+
+  <!-- SNAPSHOT: dark text → photo below -->
+  <section id="snapshot">
+    <div class="dark-block">
+      <h2>Snapshot</h2>
+      <p>I'm Boston born and bred, but currently live in NY with my wife, daughters, and guard dog. I'm also a New Zealand citizen, and try to spend as much time there as I can.</p>
+      <p>As the son of two doctors, health was a big part of my upbringing. Being outside is where I'm happiest&hellip;especially when it's on the golf course.</p>
+      <p>I've been entrepreneurial since I was a kid. Right now, I'm focused on real estate software.</p>
+    </div>
+    <div class="photo-strip" style="background-image:url('About.jpg')"></div>
+  </section>
+
+  <!-- PROPTECH -->
+  <section id="proptech">
+    <h2>PropTech</h2>
+    <div class="intro">
+      <p>I studied math and economics at <a href="https://www.wesleyan.edu" target="_blank" rel="noopener">Wesleyan</a>, and then took a job in a quantitative consulting group at <a href="https://www.ey.com" target="_blank" rel="noopener">EY</a>. Living in hotels and spreadsheets got old&hellip;so I quit and dove headfirst into software startups.</p>
+      <p>Fast forward 9 years and I'm still at it. Most of my attention is on software for vacation rentals and hotels. Below are some of my recent PropTech ventures.</p>
+    </div>
+    <div class="companies">
+
+      <div class="company">
+        <div class="logo-ring">
+          <img src="Reva.png" alt="Reva">
+        </div>
+        <h3>Reva</h3>
+        <div class="role">Co-Founder (2023 – Present)</div>
+        <div class="desc">B2B software that helps vacation rental managers leverage guest reviews to drive insights and control their brand reputation.</div>
+      </div>
+
+      <div class="company">
+        <div class="logo-ring">
+          <img src="Mews.png" alt="Mews">
+        </div>
+        <h3>Mews</h3>
+        <div class="role">Investor (2023 – Present)</div>
+        <div class="desc">B2B software that helps hoteliers automate daily workflows to make running a hotel faster, more efficient and more profitable.</div>
+      </div>
+
+      <div class="company">
+        <div class="logo-ring">
+          <img src="Breezeway.png" alt="Breezeway">
+        </div>
+        <h3>Breezeway <span style="font-weight:400;">(Acquired)</span></h3>
+        <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
+        <div class="desc">B2B software that helps vacation rental managers automate property service. Founding team member (employee&nbsp;#5). Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by PE in Feb&nbsp;'26.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GOLF: photo → dark text + videos -->
+  <section id="golf">
+    <div class="photo-strip" style="background-image:url('Golf.jpg')"></div>
+    <div class="dark-block">
+      <h2>A good walk (not) spoiled</h2>
+      <p>Golf is my favorite game to play. I find so many parts of it compelling &mdash; the perpetual push to get better, the individuality of each course, and the people from all walks of life.</p>
+      <p>I've had some cool moments since picking up the game: walking on my varsity college golf team, serving as Jack Nicklaus's security at the '16 Ryder Cup, drinking champagne in the clubhouse at the '22 U.S. Open, and appearing in a FootJoy ad (see below).</p>
+      <div class="video-grid">
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/bxcE1Vvjbc0" title="FootJoy Ad" allowfullscreen></iframe>
+        </div>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/YEiAgYWzPTE" title="Golf Video" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRAVEL: photo → dark text -->
+  <section id="travel">
+    <div class="photo-strip" style="background-image:url('Travel.jpg')"></div>
+    <div class="dark-block">
+      <h2>Travel</h2>
+      <p>My knack for travel began when I spent 366 consecutive days abroad in 2002. Seeing so many different cultures was formative, and helped shape many of my perspectives.</p>
+      <p>For me, travel is about the duality of adventure and introspection. Experiencing things for the first time, and becoming comfortable in uncomfortable situations. I dust off my passport whenever I can, though it's never often enough.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>&copy; 2026 by Ben Firn</footer>
+
+  <script>
+    const sectionIds = ['story', 'snapshot', 'proptech', 'golf', 'travel'];
+    const navMap = { story: 'story', snapshot: 'story', proptech: 'proptech', golf: 'golf', travel: 'travel' };
+    const dotMap = { story: 0, snapshot: 0, proptech: 1, golf: 2, travel: 3 };
+    const navLinks = document.querySelectorAll('nav a');
+    const dots = document.querySelectorAll('.dot');
+
+    function goto(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function updateActive() {
+      const y = window.scrollY + 120;
+      let current = sectionIds[0];
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop <= y) current = id;
+      }
+      navLinks.forEach(a => a.classList.toggle('active', a.dataset.section === navMap[current]));
+      dots.forEach((d, i) => d.classList.toggle('active', i === dotMap[current]));
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+  </script>
+
+</body>
+</html>
