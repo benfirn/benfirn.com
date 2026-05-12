@@ -112,7 +112,7 @@
     /* ── SHARED: dark text block ── */
     .dark-block {
       background: #3d4455;
-      padding: 6rem 10%;
+      padding: 6rem 2%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -126,8 +126,8 @@
       letter-spacing: 0.02em;
     }
     .dark-block p {
-      max-width: 720px;
-      font-size: 1.02rem;
+      max-width: 1000px;
+      font-size: 1.27rem;
       line-height: 1.85;
       color: #fff;
       font-weight: 300;
@@ -144,7 +144,7 @@
     /* ── PROPTECH ── */
     #proptech {
       background: #3d4455;
-      padding: 6rem 10%;
+      padding: 6rem 2%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -156,51 +156,67 @@
       text-align: center; letter-spacing: 0.02em;
     }
     #proptech .intro {
-      max-width: 740px;
+      max-width: 1000px;
       text-align: center;
       margin-bottom: 4rem;
     }
     #proptech .intro p {
       color: #fff;
       font-weight: 300;
-      font-size: 1.02rem; line-height: 1.85;
+      font-size: 1.27rem; line-height: 1.85;
       margin-bottom: 1.2rem;
     }
     #proptech .intro a { color: #d97068; text-decoration: none; }
     #proptech .intro a:hover { text-decoration: underline; }
 
     .companies {
-      display: flex; gap: 3.5rem;
-      justify-content: center; flex-wrap: wrap;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      width: 100%;
     }
-    .company { text-align: center; max-width: 210px; }
+    .company {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      background: rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 2rem 2.5rem;
+      text-align: left;
+    }
     .logo-ring {
-      width: 100px; height: 100px;
+      width: 90px; height: 90px;
       border-radius: 50%;
-      margin: 0 auto 1.1rem;
       overflow: hidden;
+      flex-shrink: 0;
+      border: 3px solid #d97068;
     }
     .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+    .card-text { display: flex; flex-direction: column; }
     .company h3 {
-      font-size: 1rem; font-weight: 700; color: #fff;
+      font-size: 1.1rem; font-weight: 700; color: #fff;
       margin-bottom: 0.3rem; letter-spacing: 0.02em;
     }
     .company h3 a { color: #fff; text-decoration: none; }
     .company h3 a:hover { text-decoration: underline; }
-    .company .role { color: #ccc; font-size: 0.82rem; font-weight: 300; margin-bottom: 0.6rem; }
-    .company .desc { color: #fff; font-size: 0.83rem; font-weight: 300; line-height: 1.55; }
+    .company .role { color: #ccc; font-size: 0.88rem; font-weight: 300; margin-bottom: 0.8rem; }
+    .company .years { color: #aaa; font-size: 0.82rem; font-weight: 300; margin-bottom: 0.8rem; }
+    .company .desc { color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7; }
 
     /* ── GOLF videos ── */
     .video-grid {
       margin-top: 2.5rem;
       display: flex; gap: 1.5rem;
       justify-content: center;
-      width: 100%; max-width: 1300px;
+      width: 100%; max-width: 975px;
     }
     .video-wrap {
       flex: 1 1 0;
       position: relative; padding-bottom: 30%;
       height: 0; border-radius: 6px; overflow: hidden;
+      border: 3px solid #d97068;
     }
     .video-wrap iframe {
       position: absolute; top: 0; left: 0;
@@ -275,27 +291,33 @@
         <a href="https://www.joinreva.com" target="_blank" rel="noopener"><div class="logo-ring">
           <img src="Reva.png" alt="Reva">
         </div></a>
-        <h3><a href="https://www.joinreva.com" target="_blank" rel="noopener">Reva</a></h3>
-        <div class="role">Co-Founder (2023 – Present)</div>
-        <div class="desc">B2B software that helps vacation rental managers leverage guest reviews to drive insights and control their brand reputation.</div>
+        <div class="card-text">
+          <h3><a href="https://www.joinreva.com" target="_blank" rel="noopener">Reva</a></h3>
+          <div class="role">Co-Founder (2023 – Present)</div>
+          <div class="desc">Software that helps vacation rental managers leverage guest reviews to drive insights and control their brand reputation.</div>
+        </div>
       </div>
 
       <div class="company">
         <a href="https://www.mews.com" target="_blank" rel="noopener"><div class="logo-ring">
           <img src="Mews.png" alt="Mews">
         </div></a>
-        <h3><a href="https://www.mews.com" target="_blank" rel="noopener">Mews</a></h3>
-        <div class="role">Investor (2023 – Present)</div>
-        <div class="desc">B2B software that helps hoteliers automate daily workflows to make running a hotel faster, more efficient and more profitable.</div>
+        <div class="card-text">
+          <h3><a href="https://www.mews.com" target="_blank" rel="noopener">Mews</a></h3>
+          <div class="role">Investor (2023 – Present)</div>
+          <div class="desc">Software that helps hoteliers automate workflows to eliminate headaches and boost efficiency.</div>
+        </div>
       </div>
 
       <div class="company">
         <a href="https://www.breezeway.io" target="_blank" rel="noopener"><div class="logo-ring">
           <img src="Breezeway.png" alt="Breezeway">
         </div></a>
-        <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a> <span style="font-weight:400;">(Acquired)</span></h3>
-        <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
-        <div class="desc">B2B software that helps vacation rental managers automate property service. Founding team member (employee&nbsp;#5). Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by PE in Feb&nbsp;'26.</div>
+        <div class="card-text">
+          <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a> <span style="font-weight:400;">(Acquired)</span></h3>
+          <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
+          <div class="desc">Software that helps vacation rental managers automate property service. Founding team (employee #5). Helped find product-market fit, hire 100+ ppl, and grow ARR 125X. Acquired in Feb '26.</div>
+        </div>
       </div>
 
     </div>
@@ -340,7 +362,14 @@
     const dots = document.querySelectorAll('.dot');
 
     function goto(id) {
-      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+      const el = document.getElementById(id);
+      if (id === 'story' || id === 'snapshot') {
+        el.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      const darkBlock = el.querySelector('.dark-block') || el;
+      const targetY = darkBlock.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.5;
+      window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
     }
 
     function updateActive() {
