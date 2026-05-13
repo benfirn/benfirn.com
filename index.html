@@ -247,7 +247,9 @@
       border-radius: 10px;
       overflow: hidden;
       height: 360px;
+      transition: box-shadow 0.3s ease;
     }
+    .map-wrap:hover { box-shadow: 0 0 18px rgba(217, 112, 104, 0.7); }
     #golf-map { width: 100%; height: 100%; }
     .chart-wrap {
       flex: 1 1 50%;
@@ -259,7 +261,9 @@
       flex-direction: column;
       justify-content: center;
       height: 360px;
+      transition: box-shadow 0.3s ease;
     }
+    .chart-wrap:hover { box-shadow: 0 0 18px rgba(217, 112, 104, 0.7); }
     .chart-title {
       color: #fff;
       font-size: 0.85rem;
@@ -352,7 +356,7 @@
   <!-- SNAPSHOT: dark text → photo below -->
   <section id="snapshot">
     <div class="dark-block">
-      <h2>Snapshot</h2>
+      <h2>Story</h2>
       <p>I'm Boston born and bred, but currently live in Westchester (NY) with my wife, two daughters, and guard dog. I'm also a New Zealand citizen, and try to spend as much time there as I can.</p>
       <p>As the son of two doctors, health was a big part of my upbringing. Being outside is where I'm happiest&hellip;especially when it's on the golf course.</p>
       <p>I've been entrepreneurial since I was a kid. Right now, I'm focused on real estate software.</p>
@@ -375,7 +379,7 @@
         </div></a>
         <div class="card-text">
           <h3><a href="https://www.joinreva.com" target="_blank" rel="noopener">Reva</a></h3>
-          <div class="role">Co-Founder (2023 – Present)</div>
+          <div class="role">Co-Founder & Partner (2023 – Present)</div>
         </div>
         <div class="desc">Software that helps vacation rental managers leverage guest reviews to drive insights and control their reputation. We're a scrappy team on a mission to help operators turn guest feedback into a competitive advantage.</div>
       </div>
@@ -396,7 +400,7 @@
           <img src="Breezeway.png" alt="Breezeway">
         </div></a>
         <div class="card-text">
-          <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a> <span style="font-weight:400; color:#ccc;">(Acquired)</span></h3>
+          <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a></h3>
           <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
         </div>
         <div class="desc">Software that helps vacation rental managers automate property service. Employee #5, and member of mgmt team. Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by private equity in Feb '26.</div>
@@ -550,6 +554,7 @@
         scales: {
           x: {
             type: 'time',
+            bounds: 'data',
             time: { unit: 'year', displayFormats: { year: 'yyyy' } },
             grid: { color: 'rgba(255,255,255,0.06)' },
             ticks: { color: '#aaa', font: { family: 'Lato', size: 10 }, maxRotation: 0 }
