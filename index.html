@@ -436,9 +436,9 @@
         obs.disconnect();
       }
     }).observe(document.getElementById('golf-map'));
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; OpenStreetMap &copy; CARTO',
-      maxZoom: 19
+    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg', {
+      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
+      maxZoom: 16
     }).addTo(golfMap);
     const flagIcon = L.divIcon({
       className: 'flag-icon',
