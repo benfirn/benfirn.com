@@ -545,29 +545,35 @@
       <div class="media-grid">
 
         <!-- Video shuffler -->
-        <div class="media-thumb" id="video-shuffler" onclick="openVideo()">
-          <img class="thumb-img" id="vid-img-0" src="https://img.youtube.com/vi/bxcE1Vvjbc0/maxresdefault.jpg" alt="FootJoy Ad">
-          <img class="thumb-img hidden" id="vid-img-1" src="https://img.youtube.com/vi/YEiAgYWzPTE/maxresdefault.jpg" alt="Golf Video">
-          <div class="thumb-overlay">
-            <div class="play-btn-icon">
-              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+        <div style="display:flex;flex-direction:column;flex:1 1 0;">
+          <div class="chart-title" style="margin-bottom:0.6rem;">FootJoy Commercial</div>
+          <div class="media-thumb" id="video-shuffler" onclick="openVideo()">
+            <img class="thumb-img" id="vid-img-0" src="https://img.youtube.com/vi/bxcE1Vvjbc0/maxresdefault.jpg" alt="FootJoy Ad">
+            <img class="thumb-img hidden" id="vid-img-1" src="https://img.youtube.com/vi/YEiAgYWzPTE/maxresdefault.jpg" alt="Golf Video">
+            <div class="thumb-overlay">
+              <div class="play-btn-icon">
+                <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+              </div>
+              <div class="thumb-label" id="vid-label">FootJoy Ad</div>
             </div>
-            <div class="thumb-label" id="vid-label">FootJoy Ad</div>
-          </div>
-          <div class="thumb-dots">
-            <div class="thumb-dot active" id="dot-0"></div>
-            <div class="thumb-dot" id="dot-1"></div>
+            <div class="thumb-dots">
+              <div class="thumb-dot active" id="dot-0"></div>
+              <div class="thumb-dot" id="dot-1"></div>
+            </div>
           </div>
         </div>
 
         <!-- Photo gallery -->
-        <div class="media-thumb" onclick="openGallery()">
-          <img class="thumb-img" src="Golf-test.jpg" alt="Golf Gallery">
-          <div class="thumb-overlay">
-            <div class="grid-btn-icon">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <div style="display:flex;flex-direction:column;flex:1 1 0;">
+          <div class="chart-title" style="margin-bottom:0.6rem;">FootJoy Photos</div>
+          <div class="media-thumb" onclick="openGallery()">
+            <img class="thumb-img" src="Golf-test.jpg" alt="Golf Gallery">
+            <div class="thumb-overlay">
+              <div class="grid-btn-icon">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              </div>
+              <div class="thumb-label">View Photos</div>
             </div>
-            <div class="thumb-label">Photo Gallery</div>
           </div>
         </div>
 
