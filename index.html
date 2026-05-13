@@ -436,8 +436,8 @@
         obs.disconnect();
       }
     }).observe(document.getElementById('golf-map'));
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      maxZoom: 19
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=5311fd7b-9039-409f-897c-409df7f8163d', {
+      maxZoom: 16
     }).addTo(golfMap);
     const flagIcon = L.divIcon({
       className: 'flag-icon',
