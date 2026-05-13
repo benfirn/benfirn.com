@@ -20,6 +20,70 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Lato', sans-serif; overflow-x: hidden; color: #222; }
 
+    /* ── RIDDLES ── */
+    .riddles-list {
+      max-width: 800px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .riddle-card {
+      background: rgba(255,255,255,0.06);
+      border: 2px solid rgba(217,112,104,0.35);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: border-color 0.25s;
+    }
+    .riddle-card.open { border-color: #d97068; }
+    .riddle-question {
+      padding: 1.4rem 1.8rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .riddle-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+    .riddle-body {
+      font-size: 0.97rem;
+      font-weight: 300;
+      color: #ccc;
+      line-height: 1.75;
+      margin-bottom: 1rem;
+    }
+    .riddle-toggle {
+      display: inline-block;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #d97068;
+      border: 1.5px solid rgba(217,112,104,0.6);
+      border-radius: 20px;
+      padding: 0.3rem 0.9rem;
+      transition: background 0.2s, color 0.2s;
+    }
+    .riddle-card.open .riddle-toggle { background: #d97068; color: #fff; }
+    .riddle-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .riddle-card.open .riddle-answer { max-height: 400px; }
+    .riddle-answer-inner {
+      padding: 1.2rem 1.8rem 1.4rem;
+      border-top: 1px solid rgba(217,112,104,0.2);
+    }
+    .riddle-answer-text {
+      font-size: 0.97rem;
+      font-weight: 300;
+      color: #ddd;
+      line-height: 1.75;
+    }
+
     /* ── NAV ── */
     nav {
       position: fixed;
@@ -445,7 +509,7 @@
     <a href="#story" class="active" data-section="story">Story</a>
     <a href="#proptech" data-section="proptech">PropTech</a>
     <a href="#golf" data-section="golf">Golf</a>
-    <a href="#travel" data-section="travel">Travel</a>
+    <a href="#riddles" data-section="riddles">Riddles</a>
   </nav>
 
   <!-- SIDE DOTS -->
@@ -453,7 +517,7 @@
     <button class="dot active" aria-label="Story" onclick="goto('story')"></button>
     <button class="dot" aria-label="PropTech" onclick="goto('proptech')"></button>
     <button class="dot" aria-label="Golf" onclick="goto('golf')"></button>
-    <button class="dot" aria-label="Travel" onclick="goto('travel')"></button>
+    <button class="dot" aria-label="Riddles" onclick="goto('riddles')"></button>
   </div>
 
   <!-- HERO -->
@@ -619,12 +683,92 @@
   </section>
 
   <!-- TRAVEL: photo → dark text -->
-  <section id="travel">
-    <div class="photo-strip" style="background-image:url('Travel.jpg')"></div>
-    <div class="dark-block">
-      <h2>Travel</h2>
-      <p>My knack for travel began when I spent 366 consecutive days abroad in 2002. Seeing so many different cultures was formative, and helped shape many of my perspectives.</p>
-      <p>For me, travel is about the duality of adventure and introspection. Experiencing things for the first time, and becoming comfortable in uncomfortable situations. I dust off my passport whenever I can, though it's never often enough.</p>
+  <section id="riddles">
+    <div class="dark-block" style="max-width:100%; padding: 5rem 4%;">
+      <h2 style="text-align:center; margin-bottom:1rem;">Riddles</h2>
+      <p style="text-align:center; color:#ccc; font-size:1.05rem; font-weight:300; max-width:680px; margin:0 auto 3rem; line-height:1.75;">A few of my favorite brain teasers. Give each one a shot before peeking at the answer.</p>
+
+      <div class="riddles-list">
+
+        <div class="riddle-card" onclick="toggleRiddle(this)">
+          <div class="riddle-question">
+            <div class="riddle-title">River Crossing</div>
+            <div class="riddle-body">A man has to get a fox, a chicken, and a sack of corn across a river. He has a rowboat that can carry only him and one other thing. If the fox and the chicken are left together, the fox will eat the chicken. If the chicken and the corn are left together, the chicken will eat the corn. How does the man do it?</div>
+            <div class="riddle-toggle">See Answer</div>
+          </div>
+          <div class="riddle-answer">
+            <div class="riddle-answer-inner">
+              <div class="riddle-answer-text">Take the chicken across first (the fox and corn are safe together). Go back, take the fox across, then bring the chicken back. Leave the chicken, take the corn across and leave it with the fox. Finally, return for the chicken.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="riddle-card" onclick="toggleRiddle(this)">
+          <div class="riddle-question">
+            <div class="riddle-title">Three Light Switches</div>
+            <div class="riddle-body">A lightbulb is inside a closed closet — you can't see if it's on or off. Outside are three switches, one of which controls the bulb. You can flip the switches however you want, but once you open the door you can no longer touch them. How do you figure out which switch controls the light?</div>
+            <div class="riddle-toggle">See Answer</div>
+          </div>
+          <div class="riddle-answer">
+            <div class="riddle-answer-inner">
+              <div class="riddle-answer-text">Flip switch 1 and wait a few minutes. Flip switch 1 back off, then immediately flip switch 2. Open the door. If the light is on, switch 2 controls it. If it's off, feel the bulb — if it's warm, switch 1 controls it; if cold, it's switch 3.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="riddle-card" onclick="toggleRiddle(this)">
+          <div class="riddle-question">
+            <div class="riddle-title">10 Bags of Gold Coins</div>
+            <div class="riddle-body">You have 10 bags of 1,000 coins each. One bag is full of forgeries. Real coins weigh 1 gram; forgeries weigh 1.1 grams. You can visit the scale only once and get one accurate weight. How do you identify the bag of forgeries?</div>
+            <div class="riddle-toggle">See Answer</div>
+          </div>
+          <div class="riddle-answer">
+            <div class="riddle-answer-inner">
+              <div class="riddle-answer-text">Take 1 coin from bag 1, 2 from bag 2, and so on up to 10 from bag 10. Weigh them all together. Without forgeries the total would be 55 grams. The excess — e.g. 55.3 grams means 3 forgeries — tells you exactly which bag it is.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="riddle-card" onclick="toggleRiddle(this)">
+          <div class="riddle-question">
+            <div class="riddle-title">Burning Rope</div>
+            <div class="riddle-body">You have two oil-soaked ropes, each of which takes exactly 1 hour to burn — but they don't burn at a constant rate. Using only a lighter, how can you measure exactly 45 minutes?</div>
+            <div class="riddle-toggle">See Answer</div>
+          </div>
+          <div class="riddle-answer">
+            <div class="riddle-answer-inner">
+              <div class="riddle-answer-text">Light rope 1 from both ends and rope 2 from one end at the same time. When rope 1 burns out (30 min), immediately light the other end of rope 2. It will burn out in exactly 15 more minutes — 45 minutes total.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="riddle-card" onclick="toggleRiddle(this)">
+          <div class="riddle-question">
+            <div class="riddle-title">Crates of Apples &amp; Oranges</div>
+            <div class="riddle-body">Three crates are labeled "A" (apples), "O" (oranges), and "A+O" (both) — but all three labels are wrong. You may pick one crate and have one fruit pulled from it. How do you determine what's in all three crates?</div>
+            <div class="riddle-toggle">See Answer</div>
+          </div>
+          <div class="riddle-answer">
+            <div class="riddle-answer-inner">
+              <div class="riddle-answer-text">Pick from the "A+O" crate. Since all labels are wrong, it must be either all apples or all oranges. If you pull an apple, that crate is apples — so the "A" crate must be oranges, and the "O" crate must be both. Reverse the logic if you pull an orange.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="riddle-card" onclick="toggleRiddle(this)">
+          <div class="riddle-question">
+            <div class="riddle-title">Four Men in Hats</div>
+            <div class="riddle-body">Four men are buried neck-deep in a line with a wall between men 1 and 2. Each wears one of two black and two white hats. They can only look forward, can't speak, and must identify their own hat color or everyone gets shot. After one minute, one man calls out with certainty. Which one, and how does he know?</div>
+            <div class="riddle-toggle">See Answer</div>
+          </div>
+          <div class="riddle-answer">
+            <div class="riddle-answer-inner">
+              <div class="riddle-answer-text">Man 3 calls out. He can see man 2's hat. Man 4 can also see men 2 and 3 but stays silent — which tells man 3 that men 2 and 3 are wearing different colors. Since man 3 can see man 2's hat, he knows his own must be the opposite color.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
@@ -746,9 +890,9 @@
     });
   </script>
   <script>
-    const sectionIds = ['story', 'snapshot', 'proptech', 'golf', 'travel'];
-    const navMap = { story: 'story', snapshot: 'story', proptech: 'proptech', golf: 'golf', travel: 'travel' };
-    const dotMap = { story: 0, snapshot: 0, proptech: 1, golf: 2, travel: 3 };
+    const sectionIds = ['story', 'snapshot', 'proptech', 'golf', 'riddles'];
+    const navMap = { story: 'story', snapshot: 'story', proptech: 'proptech', golf: 'golf', riddles: 'riddles' };
+    const dotMap = { story: 0, snapshot: 0, proptech: 1, golf: 2, riddles: 3 };
     const navLinks = document.querySelectorAll('nav a');
     const dots = document.querySelectorAll('.dot');
 
@@ -776,6 +920,12 @@
 
     window.addEventListener('scroll', updateActive, { passive: true });
     updateActive();
+
+    function toggleRiddle(card) {
+      const toggle = card.querySelector('.riddle-toggle');
+      card.classList.toggle('open');
+      toggle.textContent = card.classList.contains('open') ? 'Hide Answer' : 'See Answer';
+    }
   </script>
 
   <script>
