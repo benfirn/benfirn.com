@@ -216,7 +216,7 @@
     .video-wrap {
       flex: 1 1 0;
       position: relative;
-      height: 360px;
+      height: 280px;
       border-radius: 6px; overflow: hidden;
       border: 3px solid #d97068;
     }
@@ -393,7 +393,7 @@
           </div>
         </div>
         <div style="display:flex;flex-direction:column;flex:1 1 50%;">
-          <div class="chart-title" style="margin-bottom:0.6rem;">Handicap Index Over Time</div>
+          <div class="chart-title" style="margin-bottom:0.6rem;">Handicap Index Over Time (9.4)</div>
           <div class="chart-wrap" style="flex:1;">
             <canvas id="handicap-chart"></canvas>
           </div>
@@ -428,7 +428,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
   <script>
-    const golfMap = L.map('golf-map', { zoomControl: true, scrollWheelZoom: false });
+    const golfMap = L.map('golf-map', { zoomControl: true, scrollWheelZoom: false, attributionControl: false });
     golfMap.setView([42, -96], 3);
     new IntersectionObserver((entries, obs) => {
       if (entries[0].isIntersecting) {
@@ -436,9 +436,8 @@
         obs.disconnect();
       }
     }).observe(document.getElementById('golf-map'));
-    L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg', {
-      attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a>',
-      maxZoom: 16
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      maxZoom: 19
     }).addTo(golfMap);
     const flagIcon = L.divIcon({
       className: 'flag-icon',
