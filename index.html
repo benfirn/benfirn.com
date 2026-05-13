@@ -179,32 +179,33 @@
       width: 100%;
     }
     .company {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      column-gap: 2.5rem;
+      row-gap: 0.8rem;
+      align-items: start;
       background: rgba(255,255,255,0.06);
       border-radius: 12px;
       padding: 2rem 2.5rem;
       text-align: left;
     }
+    .company > a { grid-column: 1; grid-row: 1; display: block; align-self: center; }
     .logo-ring {
       width: 90px; height: 90px;
       border-radius: 50%;
       overflow: hidden;
-      flex-shrink: 0;
       border: 3px solid #d97068;
     }
     .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
-    .card-text { display: flex; flex-direction: column; }
+    .card-text { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; }
     .company h3 {
       font-size: 1.1rem; font-weight: 700; color: #fff;
       margin-bottom: 0.3rem; letter-spacing: 0.02em;
     }
     .company h3 a { color: #fff; text-decoration: none; }
     .company h3 a:hover { text-decoration: underline; }
-    .company .role { color: #ccc; font-size: 0.88rem; font-weight: 300; margin-bottom: 0.8rem; }
-    .company .years { color: #aaa; font-size: 0.82rem; font-weight: 300; margin-bottom: 0.8rem; }
-    .company .desc { color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7; }
+    .company .role { color: #ccc; font-size: 0.88rem; font-weight: 300; margin-bottom: 0; }
+    .company .desc { grid-column: 2; grid-row: 2; color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7; }
 
     /* ── GOLF videos ── */
     .video-grid {
@@ -230,7 +231,7 @@
       gap: 1.5rem;
       width: 100%;
       max-width: 975px;
-      margin: 2.5rem auto 3rem;
+      margin: 2.5rem auto 1.5rem;
       align-items: stretch;
     }
     .map-wrap {
@@ -263,6 +264,19 @@
     }
     .flag-icon { font-size: 16px; line-height: 1; }
     .map-below-pad { margin-top: 2.5rem; }
+    .map-tooltip {
+      background: #3d4455;
+      color: #fff;
+      border: 1px solid #d97068;
+      border-radius: 6px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 400;
+      padding: 5px 10px;
+      box-shadow: none;
+      white-space: nowrap;
+    }
+    .map-tooltip::before { border-top-color: #d97068; }
     .leaflet-popup-content-wrapper {
       background: #3d4455;
       color: #fff;
@@ -283,15 +297,17 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       nav a { padding: 0 1.2rem; font-size: 0.85rem; }
-      #story { justify-content: center; padding-right: 5%; padding-left: 5%; background-attachment: scroll; background-position: 65% 42%; }
+      #story { justify-content: center; padding-right: 5%; padding-left: 5%; background-attachment: scroll; background-position: 35% 42%; }
       .hero-text { text-align: right; align-items: flex-end; }
       .companies { gap: 2rem; }
       .photo-strip { height: 390px; background-attachment: scroll; }
       .dots { display: none; }
+      .company { grid-template-columns: 70px 1fr; }
+      .company .desc { grid-column: 1 / -1; grid-row: 2; }
       .golf-viz { flex-direction: column; }
       .golf-viz > div { flex: none; width: 100%; }
-      .map-wrap { flex: none; height: 280px; }
-      .chart-wrap { flex: none; height: 280px; }
+      .map-wrap { flex: none; height: 210px; }
+      .chart-wrap { flex: none; height: 210px; }
       .video-grid { flex-direction: column; }
       .video-wrap { flex: none; width: 100%; height: 210px; }
     }
@@ -350,8 +366,8 @@
         <div class="card-text">
           <h3><a href="https://www.joinreva.com" target="_blank" rel="noopener">Reva</a></h3>
           <div class="role">Co-Founder (2023 – Present)</div>
-          <div class="desc">Software that helps vacation rental managers leverage guest reviews to drive insights and control their brand reputation.</div>
         </div>
+        <div class="desc">Software that helps vacation rental managers leverage guest reviews to drive insights and control their brand reputation.</div>
       </div>
 
       <div class="company">
@@ -361,8 +377,8 @@
         <div class="card-text">
           <h3><a href="https://www.mews.com" target="_blank" rel="noopener">Mews</a></h3>
           <div class="role">Investor (2023 – Present)</div>
-          <div class="desc">Software that helps hoteliers automate workflows to eliminate headaches and boost efficiency.</div>
         </div>
+        <div class="desc">Software that helps hoteliers automate workflows to eliminate headaches and boost efficiency.</div>
       </div>
 
       <div class="company">
@@ -372,8 +388,8 @@
         <div class="card-text">
           <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a> <span style="font-weight:400;">(Acquired)</span></h3>
           <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
-          <div class="desc">Software that helps vacation rental managers automate property service. Founding team (employee #5). Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by PE in Feb '26.</div>
         </div>
+        <div class="desc">Software that helps vacation rental managers automate property service. Founding team (employee #5). Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by PE in Feb '26.</div>
       </div>
 
     </div>
@@ -452,7 +468,7 @@
         document.getElementById('map-title').textContent = `Golf Courses Played (${courses.length})`;
         courses.forEach(c => {
           L.marker([c.lat, c.lng], { icon: flagIcon })
-            .bindPopup(`<strong>${c.name}</strong><br><span style="color:#ccc;font-size:0.85rem">${c.location}</span>`)
+            .bindTooltip(c.name, { direction: 'top', offset: [0, -18], className: 'map-tooltip' })
             .addTo(golfMap);
         });
       });
