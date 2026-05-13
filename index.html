@@ -197,8 +197,13 @@
       border-radius: 50%;
       overflow: hidden;
       border: 3px solid #d97068;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
+    .company:hover .logo-ring {
+      transform: scale(1.12);
+      box-shadow: 0 0 18px rgba(217, 112, 104, 0.7);
+    }
     .card-text { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; }
     .company h3 {
       font-size: 1.1rem; font-weight: 700; color: #d97068;
@@ -391,7 +396,7 @@
           <img src="Breezeway.png" alt="Breezeway">
         </div></a>
         <div class="card-text">
-          <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a> <span style="font-weight:400;">(Acquired)</span></h3>
+          <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a> <span style="font-weight:400; color:#ccc;">(Acquired)</span></h3>
           <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
         </div>
         <div class="desc">Software that helps vacation rental managers automate property service. Employee #5, and member of mgmt team. Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by private equity in Feb '26.</div>
