@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>benfirn.com</title>
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-4QSLY6V0M7"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -223,6 +224,54 @@
       width: 100%; height: 100%; border: none;
     }
 
+    /* ── GOLF MAP ── */
+    .golf-viz {
+      display: flex;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 1200px;
+      margin: 2.5rem auto 0;
+      align-items: stretch;
+    }
+    .map-wrap {
+      flex: 1 1 55%;
+      border: 3px solid #d97068;
+      border-radius: 10px;
+      overflow: hidden;
+      height: 440px;
+    }
+    #golf-map { width: 100%; height: 100%; }
+    .chart-wrap {
+      flex: 1 1 45%;
+      border: 3px solid #d97068;
+      border-radius: 10px;
+      padding: 1.2rem 1.2rem 0.8rem;
+      background: rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .chart-title {
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .flag-icon { font-size: 16px; line-height: 1; }
+    .map-below-pad { margin-top: 2.5rem; }
+    .leaflet-popup-content-wrapper {
+      background: #3d4455;
+      color: #fff;
+      border: 1px solid #d97068;
+      border-radius: 6px;
+      font-family: 'Lato', sans-serif;
+    }
+    .leaflet-popup-tip { background: #3d4455; }
+    .leaflet-popup-content { font-size: 0.9rem; font-weight: 300; margin: 8px 12px; }
+
     /* ── FOOTER ── */
     footer {
       background: #3d4455; color: #fff;
@@ -238,6 +287,8 @@
       .companies { gap: 2rem; }
       .photo-strip { height: 390px; background-attachment: scroll; }
       .dots { display: none; }
+      .video-grid { flex-direction: column; }
+      .video-wrap { padding-bottom: 56%; }
     }
   </style>
 </head>
@@ -329,7 +380,21 @@
     <div class="dark-block">
       <h2>A good walk (not) spoiled</h2>
       <p>Golf is my favorite game to play. I find so many parts of it compelling &mdash; the perpetual push to get better, the individuality of each course, and the people from all walks of life.</p>
-      <p>I've had some cool moments since picking up the game: walking on my varsity college golf team, serving as Jack Nicklaus's security at the '16 Ryder Cup, drinking champagne in the clubhouse at the '22 U.S. Open, and appearing in a FootJoy ad (see below).</p>
+      <div class="golf-viz">
+        <div style="display:flex;flex-direction:column;flex:1 1 50%;">
+          <div class="chart-title" id="map-title" style="margin-bottom:0.6rem;">Golf Courses Played</div>
+          <div class="map-wrap" style="flex:1;margin:0;">
+            <div id="golf-map"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;flex:1 1 50%;">
+          <div class="chart-title" style="margin-bottom:0.6rem;">Handicap Index Over Time</div>
+          <div class="chart-wrap" style="flex:1;">
+            <canvas id="handicap-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <p class="map-below-pad">I've had some cool moments since picking up the game: walking on my varsity college golf team, serving as Jack Nicklaus's security at the '16 Ryder Cup, drinking champagne in the clubhouse at the '22 U.S. Open, and appearing in a FootJoy ad (see below).</p>
       <div class="video-grid">
         <div class="video-wrap">
           <iframe src="https://www.youtube.com/embed/bxcE1Vvjbc0" title="FootJoy Ad" allowfullscreen></iframe>
@@ -354,6 +419,119 @@
   <!-- FOOTER -->
   <footer>&copy; 2026 by Ben Firn</footer>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  <script>
+    const golfMap = L.map('golf-map', { zoomControl: true, scrollWheelZoom: false });
+    golfMap.setView([42, -96], 3);
+    new IntersectionObserver((entries, obs) => {
+      if (entries[0].isIntersecting) {
+        golfMap.invalidateSize();
+        obs.disconnect();
+      }
+    }).observe(document.getElementById('golf-map'));
+    L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
+      attribution: '&copy; Stadia Maps',
+      maxZoom: 16
+    }).addTo(golfMap);
+    const flagIcon = L.divIcon({
+      className: 'flag-icon',
+      html: '⛳',
+      iconSize: [20, 20],
+      iconAnchor: [10, 20]
+    });
+
+    fetch('courses.json')
+      .then(r => r.json())
+      .then(courses => {
+        document.getElementById('map-title').textContent = `Golf Courses Played (${courses.length})`;
+        courses.forEach(c => {
+          L.marker([c.lat, c.lng], { icon: flagIcon })
+            .bindPopup(`<strong>${c.name}</strong><br><span style="color:#ccc;font-size:0.85rem">${c.location}</span>`)
+            .addTo(golfMap);
+        });
+      });
+
+    // Handicap chart
+    const hctx = document.getElementById('handicap-chart').getContext('2d');
+    const gradient = hctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(217,112,104,0.35)');
+    gradient.addColorStop(1, 'rgba(217,112,104,0)');
+    const handicapData = [
+      ["2021-05-16",14.2],["2021-05-16",13.9],["2021-05-21",13.3],["2021-05-23",13.1],["2021-05-31",12.8],
+      ["2021-06-05",12.6],["2021-06-12",12.5],["2021-06-19",12.5],["2021-06-25",11.9],["2021-06-27",11.9],
+      ["2021-07-10",11.4],["2021-07-17",11.4],["2021-07-23",11.3],["2021-07-31",10.8],["2021-08-01",10.5],
+      ["2021-08-08",10.6],["2021-08-19",10.6],["2021-09-04",10.7],["2021-09-06",10.3],["2021-09-26",10.2],
+      ["2021-10-11",9.9],["2021-11-07",9.2],["2021-11-13",9.5],["2021-11-21",9.3],["2021-12-04",9.5],
+      ["2022-02-20",9.5],["2022-03-20",9.8],["2022-03-26",10.0],["2022-04-02",9.4],["2022-04-30",10.2],
+      ["2022-05-14",10.6],["2022-05-28",10.9],["2022-05-31",10.4],["2022-06-12",9.9],["2022-07-02",10.5],
+      ["2022-07-17",8.7],["2022-07-22",8.3],["2022-07-24",8.0],["2022-08-14",7.6],["2022-09-04",7.5],
+      ["2022-09-17",7.4],["2022-10-09",7.7],["2022-10-30",7.1],["2022-11-06",7.7],["2022-11-11",7.9],
+      ["2022-11-25",8.2],["2022-12-03",8.3],["2023-02-12",8.5],["2023-03-26",8.1],["2023-04-15",8.7],
+      ["2023-04-23",8.8],["2023-04-29",9.6],["2023-05-06",8.8],["2023-05-27",9.0],["2023-06-03",8.3],
+      ["2023-06-04",7.8],["2023-06-10",7.6],["2023-06-17",7.1],["2023-07-28",7.4],["2023-08-12",7.1],
+      ["2023-08-20",6.9],["2023-09-04",7.3],["2023-09-30",6.9],["2023-10-15",7.4],["2023-10-21",7.8],
+      ["2023-10-27",8.0],["2023-11-04",8.6],["2023-11-05",8.2],["2023-12-17",7.9],["2024-01-27",8.7],
+      ["2024-02-11",8.8],["2024-03-03",8.2],["2024-03-10",8.8],["2024-04-06",8.8],["2024-04-28",8.6],
+      ["2024-05-04",8.5],["2024-06-01",7.7],["2024-06-22",7.8],["2024-07-05",8.6],["2024-07-26",8.1],
+      ["2024-08-19",8.0],["2024-08-31",7.0],["2024-09-07",7.3],["2024-09-13",6.7],["2024-09-15",6.5],
+      ["2024-11-24",6.6],["2024-11-30",6.0],["2025-03-01",6.0],["2025-03-28",5.9],["2025-04-06",5.9],
+      ["2025-05-10",6.0],["2025-05-17",6.2],["2025-06-01",6.3],["2025-06-29",7.1],["2025-07-01",6.5],
+      ["2025-07-19",7.0],["2025-07-21",7.1],["2025-08-01",7.8],["2025-08-16",8.1],["2025-08-19",7.9],
+      ["2025-08-30",7.6],["2025-11-15",7.2],["2025-11-21",8.0],["2025-11-22",8.2],["2026-02-28",8.3],
+      ["2026-03-15",8.7],["2026-03-20",9.0],["2026-03-29",9.0],["2026-04-15",9.4]
+    ];
+    new Chart(hctx, {
+      type: 'line',
+      data: {
+        datasets: [{
+          data: handicapData.map(([x,y]) => ({x,y})),
+          borderColor: '#d97068',
+          borderWidth: 2,
+          backgroundColor: gradient,
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          pointHoverBackgroundColor: '#d97068',
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#3d4455',
+            borderColor: '#d97068',
+            borderWidth: 1,
+            titleColor: '#fff',
+            bodyColor: '#ccc',
+            titleFont: { family: 'Lato', size: 12 },
+            bodyFont: { family: 'Lato', size: 11 },
+            callbacks: {
+              title: items => new Date(items[0].parsed.x).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+              label: item => `Handicap: ${item.parsed.y.toFixed(1)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            type: 'time',
+            time: { unit: 'year', displayFormats: { year: 'yyyy' } },
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: { color: '#aaa', font: { family: 'Lato', size: 10 }, maxRotation: 0 }
+          },
+          y: {
+            min: 4, max: 16,
+            grid: { color: 'rgba(255,255,255,0.06)' },
+            ticks: { color: '#aaa', font: { family: 'Lato', size: 10 }, callback: v => v.toFixed(0) }
+          }
+        }
+      }
+    });
+  </script>
   <script>
     const sectionIds = ['story', 'snapshot', 'proptech', 'golf', 'travel'];
     const navMap = { story: 'story', snapshot: 'story', proptech: 'proptech', golf: 'golf', travel: 'travel' };
