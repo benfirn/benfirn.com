@@ -40,25 +40,47 @@
       transition: border-color 0.25s, box-shadow 0.3s ease;
     }
     .riddle-card:hover { box-shadow: 0 0 18px rgba(217,112,104,0.7); }
-    .riddle-card.open { border-color: #d97068; }
-    .riddle-question {
-      padding: 1.4rem 1.8rem;
+    .riddle-card.question-open,
+    .riddle-card.answer-open { border-color: #d97068; }
+    .riddle-header {
+      padding: 1.2rem 1.8rem;
       cursor: pointer;
       user-select: none;
-      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
     }
     .riddle-title {
       font-size: 1.05rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 0.5rem;
     }
+    .riddle-indicator {
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: #d97068;
+      line-height: 1;
+      flex-shrink: 0;
+      transition: transform 0.25s ease;
+    }
+    .riddle-card.question-open .riddle-indicator,
+    .riddle-card.answer-open .riddle-indicator { transform: rotate(45deg); }
+    .riddle-body-wrap {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .riddle-card.question-open .riddle-body-wrap,
+    .riddle-card.answer-open .riddle-body-wrap { max-height: 300px; }
     .riddle-body {
       font-size: 1rem;
       font-weight: 300;
       color: #fff;
       line-height: 1.7;
-      margin-bottom: 1rem;
+      padding: 0 1.8rem 1.2rem;
+      border-top: 1px solid rgba(217,112,104,0.15);
+      padding-top: 1rem;
     }
     .riddle-toggle {
       display: inline-block;
@@ -70,19 +92,20 @@
       border: 1.5px solid rgba(217,112,104,0.6);
       border-radius: 20px;
       padding: 0.3rem 0.9rem;
+      margin: 0 1.8rem 1.2rem;
+      cursor: pointer;
       transition: background 0.2s, color 0.2s;
     }
-    .riddle-card.open .riddle-toggle { background: #d97068; color: #fff; }
+    .riddle-card.answer-open .riddle-toggle { background: #d97068; color: #fff; }
     .riddle-answer {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s ease;
     }
-    .riddle-card.open .riddle-answer { max-height: 400px; }
+    .riddle-card.answer-open .riddle-answer { max-height: 400px; }
     .riddle-answer-inner {
-      padding: 1.2rem 1.8rem 1.4rem;
+      padding: 1rem 1.8rem 1.4rem;
       border-top: 1px solid rgba(217,112,104,0.2);
-      text-align: left;
     }
     .riddle-answer-text {
       font-size: 1rem;
@@ -511,8 +534,10 @@
       .chart-wrap { flex: none; height: 210px; }
       .media-grid { flex-direction: column; }
       .media-thumb { flex: none; width: 100%; height: 210px; }
-      .riddle-question { text-align: center; }
+      .riddle-header { text-align: center; justify-content: center; }
+      .riddle-body { text-align: center; }
       .riddle-answer-inner { text-align: center; }
+      .riddle-toggle { display: block; text-align: center; }
     }
   </style>
 </head>
@@ -705,11 +730,14 @@
 
       <div class="riddles-list">
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">River Crossing</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">A man has to get a fox, a chicken, and a sack of corn across a river. He has a rowboat that can carry only him and one other thing. If the fox and the chicken are left together, the fox will eat the chicken. If the chicken and the corn are left together, the chicken will eat the corn. How does the man do it?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -718,11 +746,14 @@
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">Three Light Switches</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">A lightbulb is inside a closed closet. You can't see if it's on or off. Outside are three switches, one of which controls the bulb. You can flip the switches however you want, but once you open the door you can no longer touch them. How do you figure out which switch controls the light?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -731,11 +762,14 @@
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">10 Bags of Gold Coins</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">You have 10 bags of 1,000 coins each. One bag is full of forgeries. Real coins weigh 1 gram; forgeries weigh 1.1 grams. You can visit the scale only once and get one accurate weight. How do you identify the bag of forgeries?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -744,11 +778,14 @@
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">Burning Rope</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">You have two oil-soaked ropes, each of which takes exactly 1 hour to burn, but they don't burn at a constant rate. Using only a lighter, how can you measure exactly 45 minutes?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -757,24 +794,30 @@
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">Crates of Apples &amp; Oranges</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">Three crates are labeled "A" (apples), "O" (oranges), and "A+O" (both), but all three labels are wrong. You may pick one crate and have one fruit pulled from it. How do you determine what's in all three crates?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
-              <div class="riddle-answer-text">Pick from the "A+O" crate. Since all labels are wrong, it must be either all apples or all oranges. If you pull an apple, that crate is apples — so the "A" crate must be oranges, and the "O" crate must be both. Reverse the logic if you pull an orange.</div>
+              <div class="riddle-answer-text">Pick from the "A+O" crate. Since all labels are wrong, it must be either all apples or all oranges. If you pull an apple, that crate is apples, so the "A" crate must be oranges, and the "O" crate must be both. Reverse the logic if you pull an orange.</div>
             </div>
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">Four Men in Hats</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">Four men are buried neck-deep in a line with a wall between men 1 and 2. Each wears one of two black and two white hats. They can only look forward, can't speak, and must identify their own hat color or everyone gets shot. After one minute, one man calls out with certainty. Which one, and how does he know?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -783,11 +826,14 @@
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">Ping Pong Ball in a Tube</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">You're in an 8×8×8 room with no windows or doors. In the center of the floor is a 12-inch pipe sticking 6 inches up. At the bottom sits a ping pong ball just slightly smaller than the pipe's inner diameter. You have a 12-inch piece of string, a match, a magnifying glass, a 6-inch ruler, and a paper clip. How do you get the ball out?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -796,11 +842,14 @@
           </div>
         </div>
 
-        <div class="riddle-card" onclick="toggleRiddle(this)">
-          <div class="riddle-question">
+        <div class="riddle-card">
+          <div class="riddle-header" onclick="toggleQuestion(this.closest('.riddle-card'))">
             <div class="riddle-title">Drinks at a Bar</div>
+            <div class="riddle-indicator">+</div>
+          </div>
+          <div class="riddle-body-wrap">
             <div class="riddle-body">Two identical twins walk into a bar. One weighs 250 lbs, the other 180 lbs. They both order the exact same drink. One lives; the other dies. How?</div>
-            <div class="riddle-toggle">See Answer</div>
+            <div class="riddle-toggle" onclick="toggleAnswer(this.closest('.riddle-card'), event)">See Answer</div>
           </div>
           <div class="riddle-answer">
             <div class="riddle-answer-inner">
@@ -962,10 +1011,20 @@
     window.addEventListener('scroll', updateActive, { passive: true });
     updateActive();
 
-    function toggleRiddle(card) {
+    function toggleQuestion(card) {
+      const isOpen = card.classList.contains('question-open') || card.classList.contains('answer-open');
+      if (isOpen) {
+        card.classList.remove('question-open', 'answer-open');
+        card.querySelector('.riddle-toggle').textContent = 'See Answer';
+      } else {
+        card.classList.add('question-open');
+      }
+    }
+    function toggleAnswer(card, e) {
+      e.stopPropagation();
       const toggle = card.querySelector('.riddle-toggle');
-      card.classList.toggle('open');
-      toggle.textContent = card.classList.contains('open') ? 'Hide Answer' : 'See Answer';
+      card.classList.toggle('answer-open');
+      toggle.textContent = card.classList.contains('answer-open') ? 'Hide Answer' : 'See Answer';
     }
   </script>
 
