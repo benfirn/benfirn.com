@@ -215,22 +215,130 @@
     .company .desc { grid-column: 2; grid-row: 2; color: #fff; font-size: 1rem; font-weight: 300; line-height: 1.7; }
 
     /* ── GOLF videos ── */
-    .video-grid {
+    .media-grid {
       margin-top: 2.5rem;
       display: flex; gap: 1.5rem;
       justify-content: center;
       width: 100%; max-width: 975px;
     }
-    .video-wrap {
+    .media-thumb {
       flex: 1 1 0;
       height: 280px;
-      border-radius: 6px; overflow: hidden;
+      border-radius: 6px;
+      overflow: hidden;
       border: 3px solid #d97068;
-      display: flex;
+      position: relative;
+      cursor: pointer;
+      background: #111;
+      transition: box-shadow 0.3s ease;
     }
-    .video-wrap iframe {
-      width: 100%; height: 100%; border: none; flex: 1;
+    .media-thumb:hover { box-shadow: 0 0 18px rgba(217,112,104,0.7); }
+    .media-thumb .thumb-img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: opacity 0.7s ease;
     }
+    .media-thumb .thumb-img.hidden { opacity: 0; }
+    .media-thumb .thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(0,0,0,0.28);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.8rem;
+      transition: background 0.2s;
+    }
+    .media-thumb:hover .thumb-overlay { background: rgba(0,0,0,0.45); }
+    .play-btn-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(217,112,104,0.92);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .play-btn-icon svg { width: 22px; height: 22px; fill: #fff; margin-left: 3px; }
+    .grid-btn-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: rgba(217,112,104,0.92);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .grid-btn-icon svg { width: 22px; height: 22px; fill: #fff; }
+    .thumb-label {
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-align: center;
+    }
+    .thumb-dots {
+      position: absolute;
+      bottom: 10px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; gap: 6px;
+    }
+    .thumb-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      transition: background 0.3s;
+    }
+    .thumb-dot.active { background: #d97068; }
+
+    /* ── MODALS ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.82);
+      z-index: 2000;
+      align-items: center; justify-content: center;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-box {
+      position: relative;
+      width: 90vw; max-width: 900px;
+      background: #3d4455;
+      border: 2px solid #d97068;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .modal-close {
+      position: absolute; top: 10px; right: 14px;
+      background: none; border: none;
+      color: #fff; font-size: 1.8rem;
+      cursor: pointer; z-index: 10; line-height: 1;
+    }
+    .modal-close:hover { color: #d97068; }
+    /* video modal */
+    .video-modal-box { aspect-ratio: 16/9; }
+    .video-modal-box iframe { width: 100%; height: 100%; border: none; display: block; }
+    /* gallery modal */
+    .gallery-modal-box {
+      padding: 3rem 2rem 2rem;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .gallery-modal-box h3 {
+      text-align: center;
+      color: #fff;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.75rem;
+    }
+    .gallery-grid img {
+      width: 100%; aspect-ratio: 4/3;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .gallery-grid img:hover { border-color: #d97068; transform: scale(1.02); }
 
     /* ── GOLF MAP ── */
     .golf-viz {
@@ -322,8 +430,8 @@
       .golf-viz > div { flex: none; width: 100%; }
       .map-wrap { flex: none; height: 210px; }
       .chart-wrap { flex: none; height: 210px; }
-      .video-grid { flex-direction: column; }
-      .video-wrap { flex: none; width: 100%; height: 210px; }
+      .media-grid { flex-direction: column; }
+      .media-thumb { flex: none; width: 100%; height: 210px; }
     }
   </style>
 </head>
@@ -431,12 +539,54 @@
         </div>
       </div>
       <p class="map-below-pad">I've had some cool moments since picking up the game: walking onto my varsity college team, serving as Jack Nicklaus's security at the '16 Ryder Cup, drinking champagne with USGA leadership at the '22 U.S. Open, and appearing in a FootJoy ad (check it out below).</p>
-      <div class="video-grid">
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/bxcE1Vvjbc0" title="FootJoy Ad" allowfullscreen></iframe>
+      <div class="media-grid">
+
+        <!-- Video shuffler -->
+        <div class="media-thumb" id="video-shuffler" onclick="openVideo()">
+          <img class="thumb-img" id="vid-img-0" src="https://img.youtube.com/vi/bxcE1Vvjbc0/maxresdefault.jpg" alt="FootJoy Ad">
+          <img class="thumb-img hidden" id="vid-img-1" src="https://img.youtube.com/vi/YEiAgYWzPTE/maxresdefault.jpg" alt="Golf Video">
+          <div class="thumb-overlay">
+            <div class="play-btn-icon">
+              <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+            </div>
+            <div class="thumb-label" id="vid-label">FootJoy Ad</div>
+          </div>
+          <div class="thumb-dots">
+            <div class="thumb-dot active" id="dot-0"></div>
+            <div class="thumb-dot" id="dot-1"></div>
+          </div>
         </div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/YEiAgYWzPTE" title="Golf Video" allowfullscreen></iframe>
+
+        <!-- Photo gallery -->
+        <div class="media-thumb" onclick="openGallery()">
+          <img class="thumb-img" src="Golf-test.jpg" alt="Golf Gallery">
+          <div class="thumb-overlay">
+            <div class="grid-btn-icon">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            </div>
+            <div class="thumb-label">Photo Gallery</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Video modal -->
+      <div class="modal-backdrop" id="video-modal">
+        <div class="modal-box video-modal-box">
+          <button class="modal-close" onclick="closeVideo()">×</button>
+          <iframe id="modal-iframe" src="" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <!-- Gallery modal -->
+      <div class="modal-backdrop" id="gallery-modal">
+        <div class="modal-box gallery-modal-box">
+          <button class="modal-close" onclick="closeGallery()">×</button>
+          <h3>Golf Gallery</h3>
+          <div class="gallery-grid" id="gallery-grid">
+            <img src="Golf-test.jpg" alt="On the course">
+            <img src="Golf.jpg" alt="Golf">
+          </div>
         </div>
       </div>
     </div>
@@ -600,6 +750,57 @@
 
     window.addEventListener('scroll', updateActive, { passive: true });
     updateActive();
+  </script>
+
+  <script>
+    // ── Video shuffler ──
+    const videos = [
+      { id: 'bxcE1Vvjbc0', label: 'FootJoy Ad' },
+      { id: 'YEiAgYWzPTE', label: 'Golf Video' }
+    ];
+    let vidIndex = 0;
+
+    function cycleVideo() {
+      const next = (vidIndex + 1) % videos.length;
+      document.getElementById('vid-img-' + vidIndex).classList.add('hidden');
+      document.getElementById('vid-img-' + next).classList.remove('hidden');
+      document.getElementById('dot-' + vidIndex).classList.remove('active');
+      document.getElementById('dot-' + next).classList.add('active');
+      document.getElementById('vid-label').textContent = videos[next].label;
+      vidIndex = next;
+    }
+    setInterval(cycleVideo, 4000);
+
+    function openVideo() {
+      document.getElementById('modal-iframe').src =
+        'https://www.youtube.com/embed/' + videos[vidIndex].id + '?autoplay=1';
+      document.getElementById('video-modal').classList.add('open');
+    }
+    function closeVideo() {
+      document.getElementById('modal-iframe').src = '';
+      document.getElementById('video-modal').classList.remove('open');
+    }
+
+    // ── Gallery ──
+    function openGallery() {
+      document.getElementById('gallery-modal').classList.add('open');
+    }
+    function closeGallery() {
+      document.getElementById('gallery-modal').classList.remove('open');
+    }
+
+    // close modals on backdrop click
+    document.getElementById('video-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeVideo();
+    });
+    document.getElementById('gallery-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeGallery();
+    });
+
+    // close on Escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { closeVideo(); closeGallery(); }
+    });
   </script>
 
 </body>
