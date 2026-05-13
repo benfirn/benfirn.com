@@ -546,7 +546,7 @@
 
         <!-- Video shuffler -->
         <div style="display:flex;flex-direction:column;flex:1 1 0;">
-          <div class="chart-title" style="margin-bottom:0.6rem;">Video</div>
+          <div class="chart-title" style="margin-bottom:0.6rem;">Commercial</div>
           <div class="media-thumb" id="video-shuffler" onclick="openVideo()">
             <img class="thumb-img" id="vid-img-0" src="https://img.youtube.com/vi/bxcE1Vvjbc0/hqdefault.jpg" alt="FootJoy Ad">
             <img class="thumb-img hidden" id="vid-img-1" src="https://img.youtube.com/vi/YEiAgYWzPTE/hqdefault.jpg" alt="Golf Video">
@@ -558,14 +558,14 @@
             </div>
           </div>
           <div class="thumb-dots" style="position:static;transform:none;justify-content:center;display:flex;gap:8px;margin-top:0.6rem;">
-            <div class="thumb-dot active" id="dot-0"></div>
-            <div class="thumb-dot" id="dot-1"></div>
+            <div class="thumb-dot active" id="dot-0" onclick="switchVideo(0)" style="cursor:pointer;"></div>
+            <div class="thumb-dot" id="dot-1" onclick="switchVideo(1)" style="cursor:pointer;"></div>
           </div>
         </div>
 
         <!-- Photo gallery -->
         <div style="display:flex;flex-direction:column;flex:1 1 0;">
-          <div class="chart-title" style="margin-bottom:0.6rem;">Photos</div>
+          <div class="chart-title" style="margin-bottom:0.6rem;">Digital Ads</div>
           <div class="media-thumb" onclick="openGallery()">
             <img class="thumb-img" src="Golf-test.jpg" alt="Golf Gallery">
             <div class="thumb-overlay">
@@ -786,14 +786,17 @@
     ];
     let vidIndex = 0;
 
-    function cycleVideo() {
-      const next = (vidIndex + 1) % videos.length;
+    function switchVideo(next) {
+      if (next === vidIndex) return;
       document.getElementById('vid-img-' + vidIndex).classList.add('hidden');
       document.getElementById('vid-img-' + next).classList.remove('hidden');
       document.getElementById('dot-' + vidIndex).classList.remove('active');
       document.getElementById('dot-' + next).classList.add('active');
-      document.getElementById('vid-label').textContent = videos[next].label;
       vidIndex = next;
+    }
+
+    function cycleVideo() {
+      switchVideo((vidIndex + 1) % videos.length);
     }
     setInterval(cycleVideo, 4000);
 
