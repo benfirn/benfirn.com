@@ -442,6 +442,58 @@
     .gallery-grid img:hover { border-color: #d97068; transform: scale(1.02); }
     @media (max-width: 768px) { .gallery-grid { columns: 2; } }
 
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 3000;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 0 60px rgba(0,0,0,0.8);
+      object-fit: contain;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 1.2rem;
+      right: 1.5rem;
+      font-size: 2.2rem;
+      color: #fff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      line-height: 1;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+      z-index: 3001;
+    }
+    .lightbox-close:hover { opacity: 1; }
+    .lightbox-prev, .lightbox-next {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+      color: #fff;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      cursor: pointer;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      opacity: 0.7;
+      transition: opacity 0.2s, background 0.2s;
+      z-index: 3001;
+    }
+    .lightbox-prev { left: 1rem; }
+    .lightbox-next { right: 1rem; }
+    .lightbox-prev:hover, .lightbox-next:hover { opacity: 1; background: rgba(217,112,104,0.5); }
+
     /* ── GOLF MAP ── */
     .golf-viz {
       display: flex;
@@ -723,6 +775,15 @@
           </div>
         </div>
       </div>
+
+      <!-- Lightbox -->
+      <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <button class="lightbox-prev" onclick="lightboxNav(-1, event)">&#8249;</button>
+        <img id="lightbox-img" src="" alt="">
+        <button class="lightbox-next" onclick="lightboxNav(1, event)">&#8250;</button>
+      </div>
+
     </div>
   </section>
 
@@ -1073,6 +1134,34 @@
       document.getElementById('gallery-modal').classList.remove('open');
     }
 
+    // ── Lightbox ──
+    let lightboxImages = [];
+    let lightboxIndex = 0;
+
+    function initLightbox() {
+      const imgs = document.querySelectorAll('#gallery-grid img');
+      lightboxImages = Array.from(imgs).map(img => img.src);
+      imgs.forEach((img, i) => {
+        img.addEventListener('click', function(e) {
+          e.stopPropagation();
+          lightboxIndex = i;
+          document.getElementById('lightbox-img').src = lightboxImages[i];
+          document.getElementById('lightbox').classList.add('open');
+        });
+      });
+    }
+    initLightbox();
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    function lightboxNav(dir, e) {
+      e.stopPropagation();
+      lightboxIndex = (lightboxIndex + dir + lightboxImages.length) % lightboxImages.length;
+      document.getElementById('lightbox-img').src = lightboxImages[lightboxIndex];
+    }
+
     // close modals on backdrop click
     document.getElementById('video-modal').addEventListener('click', function(e) {
       if (e.target === this) closeVideo();
@@ -1083,7 +1172,7 @@
 
     // close on Escape
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') { closeVideo(); closeGallery(); }
+      if (e.key === 'Escape') { closeVideo(); closeGallery(); closeLightbox(); }
     });
   </script>
 
