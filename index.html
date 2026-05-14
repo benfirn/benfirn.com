@@ -407,9 +407,30 @@
       cursor: pointer; z-index: 10; line-height: 1;
     }
     .modal-close:hover { color: #d97068; }
-    /* video modal */
+    /* video player modal */
     .video-modal-box { aspect-ratio: 16/9; }
     .video-modal-box iframe { width: 100%; height: 100%; border: none; display: block; }
+    /* video picker modal */
+    .video-picker-box {
+      padding: 2.5rem 2rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+    .video-picker-thumb {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      border: 2px solid rgba(217,112,104,0.35);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      aspect-ratio: 16/9;
+      background: #111;
+    }
+    .video-picker-thumb:hover { border-color: #d97068; box-shadow: 0 0 18px rgba(217,112,104,0.7); }
+    .video-picker-thumb img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.18); display: block; }
+    .video-picker-thumb .thumb-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; background: rgba(0,0,0,0.3); }
+    .video-picker-label { color: #fff; font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
     /* gallery modal */
     .gallery-modal-box {
       padding: 3rem 2rem 2rem;
@@ -700,22 +721,17 @@
       <p class="map-below-pad">I've had some cool moments since picking up the game: walking onto my varsity college team, serving as Jack Nicklaus's security at the '16 Ryder Cup, mingling with USGA leadership at the '22 U.S. Open, and appearing in a FootJoy ad campaign (check it out below).</p>
       <div class="media-grid">
 
-        <!-- Video shuffler -->
+        <!-- Video picker trigger -->
         <div style="display:flex;flex-direction:column;flex:1 1 0;">
           <div class="chart-title" style="margin-bottom:0.6rem;">Commercial</div>
-          <div class="media-thumb" id="video-shuffler" onclick="openVideo()">
-            <img class="thumb-img" id="vid-img-0" src="https://img.youtube.com/vi/bxcE1Vvjbc0/hqdefault.jpg" alt="FootJoy Ad">
-            <img class="thumb-img hidden" id="vid-img-1" src="https://img.youtube.com/vi/YEiAgYWzPTE/hqdefault.jpg" alt="Golf Video">
+          <div class="media-thumb" onclick="openVideoPicker()">
+            <img class="thumb-img" src="https://img.youtube.com/vi/bxcE1Vvjbc0/hqdefault.jpg" alt="FootJoy Ad">
             <div class="thumb-overlay">
               <div class="play-btn-icon">
                 <svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
               </div>
               <div class="thumb-label">Play Video</div>
             </div>
-          </div>
-          <div class="thumb-dots" style="position:static;transform:none;justify-content:center;display:flex;gap:8px;margin-top:0.6rem;">
-            <div class="thumb-dot active" id="dot-0" onclick="switchVideo(0)" style="cursor:pointer;"></div>
-            <div class="thumb-dot" id="dot-1" onclick="switchVideo(1)" style="cursor:pointer;"></div>
           </div>
         </div>
 
@@ -735,7 +751,28 @@
 
       </div>
 
-      <!-- Video modal -->
+      <!-- Video picker modal -->
+      <div class="modal-backdrop" id="video-picker-modal">
+        <div class="modal-box video-picker-box">
+          <button class="modal-close" onclick="closeVideoPicker()" style="z-index:10;position:absolute;top:10px;right:14px;">×</button>
+          <div class="video-picker-thumb" onclick="playVideo('bxcE1Vvjbc0')">
+            <img src="https://img.youtube.com/vi/bxcE1Vvjbc0/hqdefault.jpg" alt="FootJoy Ad">
+            <div class="thumb-overlay">
+              <div class="play-btn-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              <div class="video-picker-label">FootJoy Ad</div>
+            </div>
+          </div>
+          <div class="video-picker-thumb" onclick="playVideo('YEiAgYWzPTE')">
+            <img src="https://img.youtube.com/vi/YEiAgYWzPTE/hqdefault.jpg" alt="Golf Video">
+            <div class="thumb-overlay">
+              <div class="play-btn-icon"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+              <div class="video-picker-label">Golf Video</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Video player modal -->
       <div class="modal-backdrop" id="video-modal">
         <div class="modal-box video-modal-box">
           <button class="modal-close" onclick="closeVideo()">×</button>
@@ -1094,30 +1131,17 @@
   </script>
 
   <script>
-    // ── Video shuffler ──
-    const videos = [
-      { id: 'bxcE1Vvjbc0', label: 'FootJoy Ad' },
-      { id: 'YEiAgYWzPTE', label: 'Golf Video' }
-    ];
-    let vidIndex = 0;
-
-    function switchVideo(next) {
-      if (next === vidIndex) return;
-      document.getElementById('vid-img-' + vidIndex).classList.add('hidden');
-      document.getElementById('vid-img-' + next).classList.remove('hidden');
-      document.getElementById('dot-' + vidIndex).classList.remove('active');
-      document.getElementById('dot-' + next).classList.add('active');
-      vidIndex = next;
+    // ── Video picker ──
+    function openVideoPicker() {
+      document.getElementById('video-picker-modal').classList.add('open');
     }
-
-    function cycleVideo() {
-      switchVideo((vidIndex + 1) % videos.length);
+    function closeVideoPicker() {
+      document.getElementById('video-picker-modal').classList.remove('open');
     }
-    setInterval(cycleVideo, 4000);
-
-    function openVideo() {
+    function playVideo(id) {
+      closeVideoPicker();
       document.getElementById('modal-iframe').src =
-        'https://www.youtube.com/embed/' + videos[vidIndex].id + '?autoplay=1';
+        'https://www.youtube.com/embed/' + id + '?autoplay=1';
       document.getElementById('video-modal').classList.add('open');
     }
     function closeVideo() {
@@ -1162,6 +1186,9 @@
     }
 
     // close modals on backdrop click
+    document.getElementById('video-picker-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeVideoPicker();
+    });
     document.getElementById('video-modal').addEventListener('click', function(e) {
       if (e.target === this) closeVideo();
     });
@@ -1171,7 +1198,7 @@
 
     // close on Escape
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') { closeVideo(); closeGallery(); closeLightbox(); }
+      if (e.key === 'Escape') { closeVideoPicker(); closeVideo(); closeGallery(); closeLightbox(); }
     });
   </script>
 
