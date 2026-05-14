@@ -532,7 +532,9 @@
       border-radius: 10px;
       overflow: hidden;
       height: 360px;
+      cursor: pointer;
       transition: box-shadow 0.3s ease;
+      position: relative;
     }
     .map-wrap:hover { box-shadow: 0 0 18px rgba(217, 112, 104, 0.7); }
     #golf-map { width: 100%; height: 100%; }
@@ -546,9 +548,30 @@
       flex-direction: column;
       justify-content: center;
       height: 360px;
+      cursor: pointer;
       transition: box-shadow 0.3s ease;
+      position: relative;
     }
     .chart-wrap:hover { box-shadow: 0 0 18px rgba(217, 112, 104, 0.7); }
+    .expand-hint {
+      position: absolute;
+      bottom: 10px; right: 10px;
+      background: rgba(46,58,74,0.85);
+      border: 1px solid rgba(217,112,104,0.5);
+      border-radius: 6px;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #d97068;
+      pointer-events: none;
+      z-index: 500;
+    }
+    /* map/chart modals */
+    .map-modal-inner { height: 80vh; }
+    #golf-map-modal { width: 100%; height: 100%; }
+    .chart-modal-inner { padding: 3rem 2.5rem 2rem; height: 70vh; }
     .chart-title {
       color: #fff;
       font-size: 0.85rem;
@@ -708,14 +731,16 @@
       <div class="golf-viz">
         <div style="display:flex;flex-direction:column;flex:1 1 50%;">
           <div class="chart-title" id="map-title" style="margin-bottom:0.6rem;">Golf Courses Played</div>
-          <div class="map-wrap">
+          <div class="map-wrap" onclick="openMapModal()">
             <div id="golf-map"></div>
+            <div class="expand-hint">Click to expand</div>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;flex:1 1 50%;">
           <div class="chart-title" style="margin-bottom:0.6rem;">Handicap Index Over Time (9.4)</div>
-          <div class="chart-wrap">
+          <div class="chart-wrap" onclick="openChartModal()">
             <canvas id="handicap-chart"></canvas>
+            <div class="expand-hint">Click to expand</div>
           </div>
         </div>
       </div>
@@ -748,6 +773,22 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Map modal -->
+      <div class="modal-backdrop" id="map-modal">
+        <div class="modal-box map-modal-inner">
+          <button class="modal-close" onclick="closeMapModal()">×</button>
+          <div id="golf-map-modal"></div>
+        </div>
+      </div>
+
+      <!-- Chart modal -->
+      <div class="modal-backdrop" id="chart-modal">
+        <div class="modal-box chart-modal-inner">
+          <button class="modal-close" onclick="closeChartModal()">×</button>
+          <canvas id="handicap-chart-modal"></canvas>
+        </div>
       </div>
 
       <!-- Video picker modal -->
@@ -989,6 +1030,7 @@
     fetch('courses.json')
       .then(r => r.json())
       .then(courses => {
+        storedCourses = courses;
         document.getElementById('map-title').textContent = `Golf Courses Played (${courses.length})`;
         courses.forEach(c => {
           L.marker([c.lat, c.lng], { icon: flagIcon })
@@ -1077,6 +1119,58 @@
         }
       }
     });
+
+    // ── Map modal ──
+    let modalMapInit = false;
+    let golfMapModal;
+    let storedCourses = [];
+
+    function openMapModal() {
+      document.getElementById('map-modal').classList.add('open');
+      if (!modalMapInit) {
+        golfMapModal = L.map('golf-map-modal', { zoomControl: true, scrollWheelZoom: true, attributionControl: false });
+        golfMapModal.setView([42, -96], 4);
+        L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=5311fd7b-9039-409f-897c-409df7f8163d', { maxZoom: 16 }).addTo(golfMapModal);
+        const bigFlag = L.divIcon({ className: 'flag-icon', html: '⛳', iconSize: [24,24], iconAnchor: [12,24] });
+        storedCourses.forEach(c => {
+          L.marker([c.lat, c.lng], { icon: bigFlag })
+            .bindTooltip(c.name, { direction: 'top', offset: [0,-22], className: 'map-tooltip' })
+            .addTo(golfMapModal);
+        });
+        modalMapInit = true;
+      }
+      setTimeout(() => golfMapModal.invalidateSize(), 50);
+    }
+    function closeMapModal() {
+      document.getElementById('map-modal').classList.remove('open');
+    }
+
+    // ── Chart modal ──
+    let chartModalInit = false;
+    function openChartModal() {
+      document.getElementById('chart-modal').classList.add('open');
+      if (!chartModalInit) {
+        const mctx = document.getElementById('handicap-chart-modal').getContext('2d');
+        const mg = mctx.createLinearGradient(0, 0, 0, 400);
+        mg.addColorStop(0, 'rgba(217,112,104,0.35)');
+        mg.addColorStop(1, 'rgba(217,112,104,0)');
+        new Chart(mctx, {
+          type: 'line',
+          data: { datasets: [{ data: handicapData.map(([x,y]) => ({x,y})), borderColor: '#d97068', borderWidth: 2, backgroundColor: mg, fill: true, pointRadius: 2, pointHoverRadius: 5, pointHoverBackgroundColor: '#d97068', tension: 0.3 }] },
+          options: {
+            responsive: true, maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: { legend: { display: false }, tooltip: { backgroundColor: '#2e3a4a', borderColor: '#d97068', borderWidth: 1, titleColor: '#fff', bodyColor: '#ccc', titleFont: { family: 'Lato', size: 13 }, bodyFont: { family: 'Lato', size: 12 }, callbacks: { title: items => new Date(items[0].parsed.x).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }), label: item => `Handicap: ${item.parsed.y.toFixed(1)}` } } },
+            scales: { x: { type: 'time', bounds: 'data', time: { unit: 'year', displayFormats: { year: 'yyyy' } }, grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#aaa', font: { family: 'Lato', size: 12 }, maxRotation: 0 } }, y: { min: 4, max: 16, grid: { color: 'rgba(255,255,255,0.06)' }, ticks: { color: '#aaa', font: { family: 'Lato', size: 12 }, callback: v => v.toFixed(0) } } }
+          }
+        });
+        chartModalInit = true;
+      }
+    }
+    function closeChartModal() {
+      document.getElementById('chart-modal').classList.remove('open');
+    }
+
   </script>
   <script>
     const sectionIds = ['story', 'snapshot', 'proptech', 'golf', 'riddles'];
@@ -1183,6 +1277,8 @@
     }
 
     // close modals on backdrop click
+    document.getElementById('map-modal').addEventListener('click', function(e) { if (e.target === this) closeMapModal(); });
+    document.getElementById('chart-modal').addEventListener('click', function(e) { if (e.target === this) closeChartModal(); });
     document.getElementById('video-picker-modal').addEventListener('click', function(e) {
       if (e.target === this) closeVideoPicker();
     });
@@ -1195,7 +1291,7 @@
 
     // close on Escape
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') { closeVideoPicker(); closeVideo(); closeGallery(); closeLightbox(); }
+      if (e.key === 'Escape') { closeMapModal(); closeChartModal(); closeVideoPicker(); closeVideo(); closeGallery(); closeLightbox(); }
     });
   </script>
 
