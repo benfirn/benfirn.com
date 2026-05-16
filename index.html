@@ -1164,6 +1164,15 @@
               titleColor: '#fff', bodyColor: '#ccc',
               titleFont: { family: 'Lato', size: modal ? 13 : 12 },
               bodyFont: { family: 'Lato', size: modal ? 12 : 11 },
+              // Sort so handicap always appears before rounds
+              itemSort: (a, b) => a.datasetIndex - b.datasetIndex,
+              // Deduplicate: keep only the first handicap point found, keep all bar items
+              filter: (item, i, arr) => {
+                if (item.datasetIndex === 0) {
+                  return !arr.slice(0, i).some(p => p.datasetIndex === 0);
+                }
+                return true;
+              },
               callbacks: {
                 title: items => new Date(items[0].parsed.x).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
                 label: item => item.datasetIndex === 0
