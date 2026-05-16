@@ -1126,7 +1126,7 @@
       gradient.addColorStop(1, 'rgba(217,112,104,0)');
       const sz = modal ? 12 : 10;
       return {
-        type: 'bar',
+        type: 'line',
         data: {
           datasets: [
             {
@@ -1143,10 +1143,10 @@
               type: 'bar',
               label: 'Rounds played',
               data: roundsByYear(data),
-              backgroundColor: 'rgba(100,180,255,0.13)',
-              borderColor: 'rgba(100,180,255,0.4)',
+              backgroundColor: 'rgba(100,180,255,0.18)',
+              borderColor: 'rgba(100,180,255,0.5)',
               borderWidth: 1, borderRadius: 3,
-              barThickness: modal ? 80 : 48,
+              barThickness: modal ? 55 : 32,
               order: 1, yAxisID: 'y1'
             }
           ]
