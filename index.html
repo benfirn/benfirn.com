@@ -1063,16 +1063,8 @@
         yearDates[yr].push(iso);
       });
       return Object.entries(yearDates).sort().map(([yr, dates]) => {
-        const sorted = [...dates].sort();
-        const first = new Date(sorted[0]).getTime();
-        const last  = new Date(sorted[sorted.length - 1]).getTime();
-        const julFirst = new Date(`${yr}-07-01`).getTime();
-        // Center on Jul 1 if data extends past July; otherwise use actual midpoint
-        const x = last >= julFirst
-          ? `${yr}-07-01`
-          : new Date((first + last) / 2).toISOString().slice(0, 10);
         const y = roundsOverride[yr] !== undefined ? roundsOverride[yr] : dates.length;
-        return { x, y };
+        return { x: `${yr}-01-01`, y };
       });
     }
 
