@@ -1097,46 +1097,22 @@
               pointHoverBackgroundColor: '#d97068', tension: 0.3,
               order: 0, yAxisID: 'y'
             },
-            {
-              type: 'bar',
-              label: 'Rounds played',
-              data: roundsByYear(data),
-              backgroundColor: 'rgba(100,180,255,0.18)',
-              borderColor: 'rgba(100,180,255,0.5)',
-              borderWidth: 1, borderRadius: 3,
-              barPercentage: 0.28,
-              categoryPercentage: 1.0,
-              order: 1, yAxisID: 'y1'
-            }
           ]
         },
         options: {
           responsive: true, maintainAspectRatio: false,
           interaction: { mode: 'x', intersect: false },
           plugins: {
-            legend: {
-              display: true, position: 'top', align: 'end',
-              labels: { color: '#aaa', font: { family: 'Lato', size: modal ? 11 : 9 }, boxWidth: 10, padding: 10, usePointStyle: true }
-            },
+            legend: { display: false },
             tooltip: {
               backgroundColor: '#2e3a4a', borderColor: '#d97068', borderWidth: 1,
               titleColor: '#fff', bodyColor: '#ccc',
               titleFont: { family: 'Lato', size: modal ? 13 : 12 },
               bodyFont: { family: 'Lato', size: modal ? 12 : 11 },
-              // Sort so handicap always appears before rounds
-              itemSort: (a, b) => a.datasetIndex - b.datasetIndex,
-              // Deduplicate: keep only the first handicap point found, keep all bar items
-              filter: (item, i, arr) => {
-                if (item.datasetIndex === 0) {
-                  return !arr.slice(0, i).some(p => p.datasetIndex === 0);
-                }
-                return true;
-              },
+              filter: (item, i, arr) => !arr.slice(0, i).some(p => p.datasetIndex === 0),
               callbacks: {
                 title: items => new Date(items[0].parsed.x).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-                label: item => item.datasetIndex === 0
-                  ? `Handicap: ${item.parsed.y.toFixed(1)}`
-                  : `Rounds: ${item.parsed.y}`
+                label: item => `Handicap: ${item.parsed.y.toFixed(1)}`
               }
             }
           },
@@ -1154,12 +1130,6 @@
               ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, callback: v => v.toFixed(0) },
               title: { display: true, text: 'Handicap', color: '#d97068', font: { family: 'Lato', size: 9 } }
             },
-            y1: {
-              position: 'right', min: 0, max: 80,
-              grid: { drawOnChartArea: false },
-              ticks: { color: 'rgba(100,180,255,0.65)', font: { family: 'Lato', size: sz }, stepSize: 20 },
-              title: { display: true, text: 'Rounds', color: 'rgba(100,180,255,0.65)', font: { family: 'Lato', size: 9 } }
-            }
           }
         }
       };
