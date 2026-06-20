@@ -939,8 +939,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script>
-    const golfMap = L.map('golf-map', { zoomControl: true, scrollWheelZoom: false, attributionControl: false });
-    golfMap.setView([42, -96], 3);
+    const golfMap = L.map('golf-map', { zoomControl: false, scrollWheelZoom: false, attributionControl: false });
+    golfMap.setView([38, -96], 2);
     new IntersectionObserver((entries, obs) => {
       if (entries[0].isIntersecting) {
         golfMap.invalidateSize();
