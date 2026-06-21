@@ -1121,7 +1121,8 @@
               type: 'time', bounds: 'data', offset: false,
               time: { unit: 'year', displayFormats: { year: 'yyyy' } },
               grid: { display: false },
-              ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, maxRotation: 0 }
+              ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, maxRotation: 0,
+                callback: modal ? undefined : (val) => `'${new Date(val).getFullYear().toString().slice(2)}` }
             },
             y: {
               min: 4, max: 18, position: 'left',
