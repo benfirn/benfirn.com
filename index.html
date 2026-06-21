@@ -252,35 +252,35 @@
     section { background: #fff; }
 
     /* ── TECH ── */
-    #tech {
+    #business {
       background: #fff;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-    #tech .dark-block {
+    #business .dark-block {
       width: 100%;
     }
-    #tech h2 {
+    #business h2 {
       font-size: clamp(2rem, 4.5vw, 3.4rem);
       font-weight: 700; color: #111;
       margin-bottom: 2rem;
       text-align: center; letter-spacing: 0.02em;
     }
-    #tech .intro {
+    #business .intro {
       width: 100%;
       max-width: 1000px;
       text-align: center;
       margin-bottom: 4rem;
     }
-    #tech .intro p {
+    #business .intro p {
       color: #333;
       font-weight: 300;
       font-size: 1.27rem; line-height: 1.85;
       margin-bottom: 1.2rem;
     }
-    #tech .intro a { color: #5a9e4d; text-decoration: none; }
-    #tech .intro a:hover { text-decoration: underline; }
+    #business .intro a { color: #5a9e4d; text-decoration: none; }
+    #business .intro a:hover { text-decoration: underline; }
 
     .companies {
       display: flex;
@@ -733,7 +733,7 @@
   <!-- NAV -->
   <nav>
     <a href="#story" class="active" data-section="story">Story</a>
-    <a href="#tech" data-section="tech">Business</a>
+    <a href="#business" data-section="business">Business</a>
     <a href="#golf" data-section="golf">Golf</a>
     <a href="#other" data-section="other">Other</a>
   </nav>
@@ -744,7 +744,7 @@
   <!-- SIDE DOTS -->
   <div class="dots">
     <button class="dot active" aria-label="Story" onclick="goto('story')"></button>
-    <button class="dot" aria-label="Business" onclick="goto('tech')"></button>
+    <button class="dot" aria-label="Business" onclick="goto('business')"></button>
     <button class="dot" aria-label="Golf" onclick="goto('golf')"></button>
     <button class="dot" aria-label="Other" onclick="goto('other')"></button>
   </div>
@@ -768,7 +768,7 @@
   </section>
 
   <!-- PROPTECH -->
-  <section id="tech">
+  <section id="business">
     <div class="photo-strip" style="background-image:url('Dover.JPG')"></div>
     <div class="dark-block">
     <h2>Business</h2>
@@ -1239,9 +1239,9 @@
 
   </script>
   <script>
-    const sectionIds = ['story', 'snapshot', 'tech', 'golf', 'other'];
-    const navMap = { story: 'story', snapshot: 'story', tech: 'tech', golf: 'golf', other: 'other' };
-    const dotMap = { story: 0, snapshot: 0, tech: 1, golf: 2, other: 3 };
+    const sectionIds = ['story', 'snapshot', 'business', 'golf', 'other'];
+    const navMap = { story: 'story', snapshot: 'story', business: 'business', golf: 'golf', other: 'other' };
+    const dotMap = { story: 0, snapshot: 0, business: 1, golf: 2, other: 3 };
     const navLinks = document.querySelectorAll('nav a');
     const dots = document.querySelectorAll('.dot');
 
