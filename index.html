@@ -1122,11 +1122,14 @@
               time: { unit: 'year', displayFormats: { year: 'yyyy' } },
               grid: { display: false },
               ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, maxRotation: 0,
-                callback: modal ? undefined : (val) => `'${new Date(val).getFullYear().toString().slice(2)}` }
+                callback: modal
+                  ? (val) => new Date(val).getFullYear().toString()
+                  : (val) => `'${new Date(val).getFullYear().toString().slice(2)}` }
             },
             y: {
               min: 4, max: 18, position: 'left',
               grid: { display: false },
+              title: modal ? { display: true, text: 'Handicap Index', color: '#aaa', font: { family: 'Lato', size: 12 } } : { display: false },
               ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, callback: v => v.toFixed(0) }
             },
           }
