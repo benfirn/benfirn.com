@@ -342,14 +342,14 @@
       cursor: pointer;
       will-change: transform;
       transition: box-shadow 0.3s ease;
-      background: #111;
+      background: #fff;
       display: flex;
       flex-direction: column;
       padding: 13px 12px 11px;
       gap: 7px;
     }
     .fan-card:hover {
-      box-shadow: 0 14px 44px rgba(0,0,0,0.45), 0 0 28px rgba(90,158,77,0.75);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.45), 0 0 28px rgba(0,0,0,0.35);
       z-index: 20 !important;
     }
     .fan-card:nth-child(1) { z-index: 1; }
@@ -361,11 +361,11 @@
       text-align: center;
       font-size: 0.57rem; font-weight: 900;
       letter-spacing: 0.1em; text-transform: uppercase;
-      color: #fff;
+      color: #111;
     }
     .fan-card-content {
       flex: 1;
-      border: 2px solid rgba(90,158,77,0.65);
+      border: 2px solid rgba(0,0,0,0.65);
       border-radius: 9px;
       overflow: hidden;
       position: relative;
@@ -378,7 +378,7 @@
     }
     .fc-circle {
       width: 44px; height: 44px; border-radius: 50%;
-      background: rgba(90,158,77,0.9);
+      background: rgba(0,0,0,0.75);
       display: flex; align-items: center; justify-content: center;
     }
     .fc-circle svg { fill: #fff; }
