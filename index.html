@@ -282,44 +282,72 @@
     #business .intro a { color: #5a9e4d; text-decoration: none; }
     #business .intro a:hover { text-decoration: underline; }
 
-    .companies {
+    /* ── BUSINESS FAN STAGE ── */
+    .biz-fan-stage {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2.5rem 70px 3.5rem;
+      perspective: 900px;
+      overflow: visible;
+      width: 100%;
+      margin: 1.5rem 0 0;
+    }
+    .biz-card {
+      width: 238px;
+      height: auto;
+      min-height: 286px;
+      border-radius: 20px;
+      position: relative;
+      flex-shrink: 0;
+      margin: 0 -50px;
+      box-shadow: 0 14px 44px rgba(0,0,0,0.18);
+      cursor: pointer;
+      will-change: transform;
+      transition: box-shadow 0.3s ease;
+      background: #fff;
+      border: 2px solid #111;
       display: flex;
       flex-direction: column;
-      max-width: 1000px;
-      margin: 0 auto;
-      width: 100%;
-      text-align: left;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem 1.2rem 1rem;
+      gap: 0.4rem;
+      text-align: center;
     }
-    .company {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.6rem;
-      padding: 1.6rem 0;
-      border-bottom: 1px solid rgba(90,158,77,0.2);
+    .biz-card:hover {
+      box-shadow: 0 14px 44px rgba(0,0,0,0.25), 0 0 28px rgba(0,0,0,0.2);
+      z-index: 20 !important;
     }
-    .company:first-child { border-top: 1px solid rgba(90,158,77,0.2); }
-    .company > a { display: block; flex-shrink: 0; }
-    .logo-ring {
-      width: 72px; height: 72px;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 2.5px solid #5a9e4d;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .biz-card:nth-child(1) { z-index: 1; }
+    .biz-card:nth-child(2) { z-index: 2; }
+    .biz-card:nth-child(3) { z-index: 3; }
+    .biz-logo {
+      width: 150px; height: 60px;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
     }
-    .logo-ring img { width: 100%; height: 100%; object-fit: cover; }
-    .company:hover .logo-ring {
-      transform: scale(1.12);
-      box-shadow: 0 0 18px rgba(217, 112, 104, 0.7);
+    .biz-logo img { width: 100%; height: 100%; object-fit: contain; }
+    .biz-name {
+      font-size: 0.75rem; font-weight: 900;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #111;
     }
-    .card-text { display: flex; flex-direction: column; align-items: flex-start; text-align: left; flex: 1; }
-    .company h3 {
-      font-size: 1.1rem; font-weight: 700; color: #5a9e4d;
-      margin-bottom: 0.15rem; letter-spacing: 0.02em;
+    .biz-role {
+      font-size: 0.78rem; font-weight: 400;
+      color: #5a9e4d; letter-spacing: 0.03em;
+      line-height: 1.5;
     }
-    .company h3 a { color: #5a9e4d; text-decoration: none; }
-    .company h3 a:hover { text-decoration: underline; }
-    .company .role { color: #888; font-size: 0.85rem; font-weight: 300; margin-bottom: 0.5rem; }
-    .company .desc { color: #444; font-size: 1rem; font-weight: 300; line-height: 1.7; text-align: left; }
+    .biz-role strong { font-weight: 800; color: #111; display: block; }
+    .biz-desc {
+      font-size: 0.82rem; font-weight: 300;
+      color: #555; line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+      .biz-fan-stage { flex-direction: column; align-items: center; padding: 1.5rem 6% 2rem; gap: 16px; }
+      .biz-card { margin: 0; width: 100%; max-width: 340px; height: auto; min-height: 160px; transform: none !important; padding: 1.5rem; }
+      .biz-card:nth-child(1), .biz-card:nth-child(2), .biz-card:nth-child(3) { z-index: auto; }
+    }
 
     /* ── FAN CARDS ── */
     .golf-fan-stage {
@@ -776,39 +804,24 @@
       <p>I studied math and economics at <a href="https://www.wesleyan.edu" target="_blank" rel="noopener">Wesleyan</a>, and then took a consulting job at <a href="https://www.ey.com" target="_blank" rel="noopener">EY</a>. Living in hotels and spreadsheets got old...so I quit and dove headfirst into software startups.</p>
       <p>Then I bought my first piece of real estate, which kick-started an ever-growing interest in the intersection of physical space and technology. So, I've spent the last 9 years building software startups that make life a little easier for property managers and service providers. Below are some of my recent ventures.</p>
     </div>
-    <div class="companies">
+    <div class="biz-fan-stage" id="biz-fan-stage">
 
-      <div class="company">
-        <a href="https://www.joinreva.com" target="_blank" rel="noopener"><div class="logo-ring">
-          <img src="Reva.png" alt="Reva">
-        </div></a>
-        <div class="card-text">
-          <h3><a href="https://www.joinreva.com" target="_blank" rel="noopener">Reva</a></h3>
-          <div class="role">Co-Founder & Partner (2023 – Present)</div>
-          <div class="desc">Software that helps vacation rental managers leverage guest reviews to drive insights and control their reputation. We're a scrappy team on a mission to help operators turn guest feedback into a competitive advantage.</div>
-        </div>
+      <div class="biz-card" onclick="window.open('https://www.joinreva.com','_blank')">
+        <div class="biz-logo"><img src="Reva.png" alt="Reva"></div>
+        <div class="biz-role"><strong>Co-Founder &amp; Partner</strong>(2023 – Present)</div>
+        <div class="biz-desc">Software that helps vacation rental managers leverage guest reviews to drive insights and control their reputation. We're a scrappy team on a mission to help operators turn guest feedback into a competitive advantage.</div>
       </div>
 
-      <div class="company">
-        <a href="https://www.mews.com" target="_blank" rel="noopener"><div class="logo-ring">
-          <img src="Mews.png" alt="Mews">
-        </div></a>
-        <div class="card-text">
-          <h3><a href="https://www.mews.com" target="_blank" rel="noopener">Mews</a></h3>
-          <div class="role">Investor (2023 – Present)</div>
-          <div class="desc">Software that helps hotels and hostels automate workflows through AI-powered insights and system integrations. One of the fastest growing tech companies in hospitality, Mews powers over 15K customers across 85 countries.</div>
-        </div>
+      <div class="biz-card" onclick="window.open('https://www.mews.com','_blank')">
+        <div class="biz-logo"><img src="Mews.png" alt="Mews"></div>
+        <div class="biz-role"><strong>Investor</strong>(2023 – Present)</div>
+        <div class="biz-desc">Software that helps hotels and hostels automate workflows through AI-powered insights and system integrations. One of the fastest growing tech companies in hospitality, Mews powers over 15K customers across 85 countries.</div>
       </div>
 
-      <div class="company">
-        <a href="https://www.breezeway.io" target="_blank" rel="noopener"><div class="logo-ring">
-          <img src="Breezeway.png" alt="Breezeway">
-        </div></a>
-        <div class="card-text">
-          <h3><a href="https://www.breezeway.io" target="_blank" rel="noopener">Breezeway</a></h3>
-          <div class="role">VP, Growth &amp; Ops (2018 – 2026)</div>
-          <div class="desc">Software that helps vacation rental managers automate property service. Employee #5, and member of mgmt team. Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by private equity in Feb '26.</div>
-        </div>
+      <div class="biz-card" onclick="window.open('https://www.breezeway.io','_blank')">
+        <div class="biz-logo"><img src="Breezeway.png" alt="Breezeway"></div>
+        <div class="biz-role"><strong>VP, Growth &amp; Ops</strong>(2018 – 2026)</div>
+        <div class="biz-desc">Software that helps vacation rental managers automate property service. Employee #5 and member of the mgmt team. Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by private equity in Feb '26.</div>
       </div>
 
     </div>
@@ -1416,6 +1429,58 @@
         });
         card.addEventListener('mouseleave', function() {
           gsap.to(card, { scale: 1, y: FANNED[i].y, rotateX: 0, rotateY: 0, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
+        });
+      });
+    }
+
+    // ── Business fan cards ──
+    const bizStage = document.getElementById('biz-fan-stage');
+    const bizCards = bizStage ? bizStage.querySelectorAll('.biz-card') : [];
+    const BIZ_FANNED = [
+      { rotation: -12, y: 18 },
+      { rotation:   0, y:  0 },
+      { rotation:  12, y: -18 },
+    ];
+    const BIZ_DEPTH = [0.4, 0.7, 1.0];
+
+    if (bizCards.length && window.innerWidth > 768) {
+      gsap.set(bizCards, { rotation: 0, y: 80, scale: 0.85, transformOrigin: 'center bottom' });
+
+      const bizTl = gsap.timeline({ paused: true });
+      bizCards.forEach(function(card, i) {
+        bizTl.to(card, { rotation: BIZ_FANNED[i].rotation, y: BIZ_FANNED[i].y, scale: 1, ease: 'back.out(1.4)', duration: 0.6 }, i * 0.12);
+      });
+
+      ScrollTrigger.create({ trigger: bizStage, start: 'top 78%', end: 'top 20%', scrub: 1, animation: bizTl });
+
+      bizStage.addEventListener('mousemove', function(e) {
+        const rect = bizStage.getBoundingClientRect();
+        const cx = (e.clientX - rect.left) / rect.width  - 0.5;
+        const cy = (e.clientY - rect.top)  / rect.height - 0.5;
+        bizCards.forEach(function(card, i) {
+          const d = BIZ_DEPTH[i];
+          gsap.to(card, { x: cx * 80 * d, y: BIZ_FANNED[i].y + cy * 45 * d, rotation: BIZ_FANNED[i].rotation + cx * 12 * d, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+        });
+      });
+
+      bizStage.addEventListener('mouseleave', function() {
+        bizCards.forEach(function(card, i) {
+          gsap.to(card, { x: 0, y: BIZ_FANNED[i].y, rotation: BIZ_FANNED[i].rotation, duration: 0.8, ease: 'elastic.out(1,0.5)', overwrite: 'auto' });
+        });
+      });
+
+      bizCards.forEach(function(card, i) {
+        card.addEventListener('mouseenter', function() {
+          gsap.to(card, { scale: 1.08, y: BIZ_FANNED[i].y - 20, duration: 0.3, ease: 'power2.out', overwrite: 'auto' });
+        });
+        card.addEventListener('mousemove', function(ev) {
+          const r = card.getBoundingClientRect();
+          const tx = (ev.clientX - r.left) / r.width  - 0.5;
+          const ty = (ev.clientY - r.top)  / r.height - 0.5;
+          gsap.to(card, { rotateY: tx * 22, rotateX: -ty * 18, duration: 0.2, ease: 'power1.out', overwrite: 'auto' });
+        });
+        card.addEventListener('mouseleave', function() {
+          gsap.to(card, { scale: 1, y: BIZ_FANNED[i].y, rotateX: 0, rotateY: 0, duration: 0.5, ease: 'power3.out', overwrite: 'auto' });
         });
       });
     }
