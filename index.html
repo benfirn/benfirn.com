@@ -1118,17 +1118,15 @@
           },
           scales: {
             x: {
-              type: 'time', bounds: 'data',
-              min: '2019-01-01',
+              type: 'time', bounds: 'data', offset: false,
               time: { unit: 'year', displayFormats: { year: 'yyyy' } },
-              grid: { color: 'rgba(255,255,255,0.06)' },
+              grid: { display: false },
               ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, maxRotation: 0 }
             },
             y: {
               min: 4, max: 18, position: 'left',
-              grid: { color: 'rgba(255,255,255,0.06)' },
-              ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, callback: v => v.toFixed(0) },
-              title: { display: true, text: 'Handicap', color: '#d97068', font: { family: 'Lato', size: 9 } }
+              grid: { display: false },
+              ticks: { color: '#aaa', font: { family: 'Lato', size: sz }, callback: v => v.toFixed(0) }
             },
           }
         }
