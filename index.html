@@ -322,6 +322,7 @@
     .biz-card:nth-child(1) { z-index: 1; }
     .biz-card:nth-child(2) { z-index: 2; }
     .biz-card:nth-child(3) { z-index: 3; }
+    .biz-card:nth-child(4) { z-index: 4; }
     .biz-logo {
       width: 150px; height: 60px;
       flex-shrink: 0;
@@ -823,6 +824,12 @@
         <div class="biz-logo"><img src="Breezeway.png" alt="Breezeway"></div>
         <div class="biz-role"><strong>VP, Growth &amp; Ops</strong>(2018 – 2026)</div>
         <div class="biz-desc">Software that helps vacation rental managers automate property service. Employee #5 and member of the mgmt team. Helped find product-market fit, hire 100+ people, and grow ARR by 125X. Acquired by private equity in Feb '26.</div>
+      </div>
+
+      <div class="biz-card">
+        <div class="biz-logo"><img src="Frontier Growth.png" alt="Frontier Growth"></div>
+        <div class="biz-role"><strong>Advisor</strong>(2024 – 2025)</div>
+        <div class="biz-desc">Software that helps home service businesses drive more qualified leads through automated realtor, homeowner, and cold outreach campaigns.</div>
       </div>
 
     </div>
@@ -1438,11 +1445,12 @@
     const bizStage = document.getElementById('biz-fan-stage');
     const bizCards = bizStage ? bizStage.querySelectorAll('.biz-card') : [];
     const BIZ_FANNED = [
-      { rotation: -12, y: 18 },
-      { rotation:   0, y:  0 },
-      { rotation:  12, y: -18 },
+      { rotation: -18, y: 28 },
+      { rotation:  -6, y:  8 },
+      { rotation:   6, y: -8 },
+      { rotation:  18, y: -24 },
     ];
-    const BIZ_DEPTH = [0.4, 0.7, 1.0];
+    const BIZ_DEPTH = [0.3, 0.55, 0.75, 1.0];
 
     if (bizCards.length && window.innerWidth > 768) {
       gsap.set(bizCards, { rotation: 0, y: 80, scale: 0.85, transformOrigin: 'center bottom' });
