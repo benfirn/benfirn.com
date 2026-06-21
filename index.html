@@ -1090,7 +1090,14 @@
             {
               type: 'line',
               label: 'Handicap Index',
-              data: data.filter(([d,h]) => h !== null && normalizeDate(d) >= '2019-01-01').map(([d,h]) => ({ x: normalizeDate(d), y: h })),
+              data: (() => {
+                const pts = data.filter(([d,h]) => h !== null && normalizeDate(d) >= '2019-01-01').map(([d,h]) => ({ x: normalizeDate(d), y: h }));
+                const W = 7;
+                return pts.map((p, i) => {
+                  const slice = pts.slice(Math.max(0, i - Math.floor(W/2)), Math.min(pts.length, i + Math.ceil(W/2)));
+                  return { x: p.x, y: slice.reduce((s, v) => s + v.y, 0) / slice.length };
+                });
+              })(),
               borderColor: '#d97068', borderWidth: 2,
               backgroundColor: gradient, fill: true,
               pointRadius: 0, pointHoverRadius: modal ? 5 : 4,
